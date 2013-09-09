@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>会员管理-无结果</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/pages/member.css">
+    <script src="../static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+<div class="doc" id="doc">
+<div class="topbar" id="topbar">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-toolbar">
+                <p><i class="icon-user"></i>欢迎来到监控宝!<a href="#" target="_self" class="login">[登录]</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="header" id="header">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-masthead">
+                <a href="./index.html"><img src="../static/img/logo.png" width="312" height="80"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content" id="content">
+<div class="layout layout-nav">
+    <div class="grid">
+        <div class="mod-nav" id="mod-nav">
+            <div class="content">
+                <ul>
+                    <li class="">
+                        <a href="index.html" target="_self">概述</a>
+                    </li>
+                    <li>
+                        <a href="./jiankong-index.html" target="_self">监控项目</a>
+                    </li>
+                    <li>
+                        <a href="./warn.html" target="_self">告警</a>
+                    </li>
+                    <li class="active">
+                        <a href="./set.html" target="_self" class="">设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layout">
+    <div class="grid">
+        <div class="grid-sub">
+            <div class="mod-side-nav">
+                <div class="content">
+                    <ul>
+                        <li>
+                            <a href="./set.html">
+                                修改密码
+                            </a>
+                        </li>
+                        <li>
+                            <a href="member-manage.html" class="active">会员管理</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="grid-main">
+            <div class="wrap clearfix">
+                <div class="mod-member-manage">
+                    <div class="header">
+                        <form class="form-inline">
+                            <label class="control-label">请输入姓名：</label>
+                            <input type="text" class="input" placeholder="请输入姓名">
+                            <span class="help-inline">请输入账号：</span>
+                            <input type="text" class="input" placeholder="请输入账号">
+                            <button type="submit" class="btn btn-primary">查看</button>
+                            <a class="btn btn-warning" href="./member-add.html" target="_self"><i class="icon-plus icon-white"></i>新增告警条件</a>
+                        </form>
+                    </div>
+                    <div class="content">
+                          <table class="ui-table">
+                              <thead>
+                                <tr>
+                                    <th class="account">
+                                        会员账号
+                                    </th>
+                                    <th class="name">
+                                        会员姓名
+                                    </th>
+                                    <th class="role">
+                                        会员角色
+                                    </th>
+                                    <th class="opration">
+                                        操作
+                                    </th>
+                                </tr>
+                              </thead>
+
+                          </table>
+                    </div>
+                </div>
+
+                <div class="mod-no-result">
+                    <div class="content">
+                        <p class="no-result">抱歉！无符合条件的查询结果。请修改查询条件，重新搜索！</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<div class="footer clearfix" id="footer">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-footer">
+                <div class="content">
+                    <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<script src="../static/js/pages/member.js"></script>
+</body>
+</html>

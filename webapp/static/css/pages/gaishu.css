@@ -1,0 +1,20 @@
+.mod-hello{
+    height: 40px;
+}
+.mod-hello h1{
+    font-size: 18px;
+}
+.mod-warn-project .header{
+    height: 36px;
+}
+.mod-warn-project .header .wrap{
+    float: right;
+
+}
+.mod-warn-project .header select{
+    margin-bottom: 0px;
+    width: 170px;
+}
+.mod-warn-project .content{
+    padding: 10px 0px 20px 0px;
+}

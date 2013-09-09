@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>告警</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/warn.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li class="">
+                                        <a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li>
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="grid-sub">
+                          <div class="mod-side-nav">
+                              <div class="content">
+                                  <ul>
+                                      <li>
+                                         <a href="/warn/warn-manager.do" class="active">
+                                             告警消息
+                                         </a>
+                                      </li>
+                                      <li>
+                                          <a href="/warn/alertmonitor-manage.do">告警条件管理</a>
+                                      </li>
+                                      <li class="hide">
+                                          <a href="/warn/warn-condition-manager.do">告警方式</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="grid-main">
+                            <div class="wrap clearfix">
+                                <div class="mod-warn-set">
+                                    <div class="header">
+                                        <form class="form-horizontal" action="/warn/warn-manager.do">
+                                            <div class="control-group">
+                                                <label class="control-label control-label-left"><h5>所有告警消息</h5></label>
+                                                <div class="controls control-right">
+                                                    <span class="help-inline">选择监控项目：</span>
+                                                    <select class="select-sku" id="monitorId" name="monitorId" style="width:250px;">
+														#foreach($monitor in $monitors)
+															#if(${monitor.monitorId}==${monitorId})
+																<option value="${monitor.monitorId}" selected>${monitor.monitorName}</option>
+															#else
+																<option value="${monitor.monitorId}">${monitor.monitorName}</option>
+															#end
+														#end
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary">查找</button>
+													#if(${res.size()}!=0)
+														<a class="btn btn-success" href="/json/monitor/${monitorId}.xls">导出</a>
+													#end
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="mod-warn-condition-message">
+                                    <div class="content">
+                                        <table class="ui-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="date">
+                                                        检查时间
+                                                    </th>
+                                                    <th class="monitor-project">
+                                                        监控项目
+                                                    </th>
+                                                    <th class="message">
+                                                        告警消息
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+												#foreach($member in $res)
+													<tr>
+                                                        <td>
+                                                            ${member.alertTime}
+                                                        </td>
+                                                        <td>
+                                                            ${member.monitorName}
+                                                        </td>
+                                                        <td>
+                                                            ${member.alertMsg}
+                                                        </td>
+                                                    </tr>
+												#end
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!--mod-page start--->
+                                #if(${res.size()}==0)
+                				<div class="mod-no-result">
+                                    <div class="content">
+                                        <p class="no-result">抱歉！无符合条件的查询结果。请修改查询条件，重新搜索！</p>
+                                    </div>
+                                </div>
+                
+                				#else
+                
+                                <!--mod-page start--->
+                                <div class="mod-pages">
+                                    <div class="content">
+                
+                                        <div class="pagination pagination-large pagination-right">
+                                            <ul>
+                                                
+                                                <li><a href="/warn/warn-manager.do?currentPage=${prePage}&monitorId=${monitorId}" target="_self">«</a></li>
+                								#set($nums=[${start} .. ${end}])
+                								#foreach($i in $nums)
+                									#if ($i==${currentPage})
+                										<li class="active"><a target="_self">$i</a></li>
+                									#else
+                										<li><a href="/warn/warn-manager.do?currentPage=$i&monitorId=${monitorId}">$i</a></li>
+                									#end
+                								#end
+                								<li><a href="/warn/warn-manager.do?currentPage=${nextPage}&monitorId=${monitorId}">»</a></li>
+                                                
+                                               
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                				#end
+                                <!--mod-page end -->
+                            </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="/static/plugins/charts/ficharts/FiCharts.js"></script>
+    <script src="/static/js/pages/gaishu.js"></script>
+</body>
+</html>

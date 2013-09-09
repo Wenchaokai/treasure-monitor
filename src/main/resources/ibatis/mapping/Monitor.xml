@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="monitorSpace">
+	<typeAlias alias="monitor" type="com.best.domain.Monitor" />
+
+	<resultMap class="monitor" id="allProperties">
+		<result property="monitorId" column="monitor_id" />
+		<result property="monitorName" column="monitor_name" />
+		<result property="monitorCustomerName" column="monitor_customer_name" />
+		<result property="monitorCustomerId" column="monitor_customer_id" />
+		<result property="monitorWarehouseIdList" column="monitor_warehouse_id_list" />
+		<result property="monitorWarehouseNameList" column="monitor_warehouse_name_list" />
+		<result property="monitorStatus" column="monitor_status" />
+		<result property="monitorStartTime" column="monitor_start_time" />
+		<result property="monitorIndexList" column="monitor_index_list" />
+		<result property="monitorResponserId" column="monitor_responser_id" />
+		<result property="monitorSku" column="monitor_sku" />
+	</resultMap>
+	
+	<resultMap class="monitor" id="partProperties">
+		<result property="monitorId" column="monitor_id" />
+		<result property="monitorName" column="monitor_name" />
+		<result property="monitorIndexList" column="monitor_index_list" />
+		<result property="monitorSku" column="monitor_sku" />
+		<result property="monitorWarehouseIdList" column="monitor_warehouse_id_list" />
+		<result property="monitorWarehouseNameList" column="monitor_warehouse_name_list" />
+	</resultMap>
+	
+	<select id="SELECT_ALL_MONITOR" parameterClass="java.util.Map" resultMap="partProperties">
+		<![CDATA[
+            SELECT
+            	monitor_id,monitor_name,monitor_index_list,monitor_sku,monitor_warehouse_id_list,monitor_warehouse_name_list
+            FROM 
+            	monitor
+            ORDER BY 
+            	monitor_id desc
+            LIMIT #start#,#pageSize#
+        ]]>
+	</select>
+	
+	<select id="GET_MONITOR_BY_PAGESIZE" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	monitor
+            ORDER BY 
+            	monitor_id desc
+            LIMIT 
+            	#start#,#pageSize#
+        ]]>
+	</select>
+	
+	<select id="GET_MONITOR_BY_TOTALSIZE" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+            SELECT
+            	count(*)
+            FROM 
+            	monitor
+        ]]>
+	</select>
+	
+	<delete id="DELETE_MONITOR" parameterClass="java.lang.Long">
+		<![CDATA[
+            DELETE FROM 
+            	monitor
+            WHERE 
+            	monitor_id=#monitorId#
+        ]]>
+	</delete>
+	
+	<select id="QUERY_MONITOR" parameterClass="java.lang.Long" resultMap="allProperties">
+		<![CDATA[
+            SELECT 
+            	*
+            FROM 
+            	monitor
+            WHERE 
+            	monitor_id=#monitorId#
+        ]]>
+	</select>
+	
+	<update id="UPDATE_MONITOR" parameterClass="monitor">
+		<![CDATA[
+            UPDATE 
+            	monitor 
+            SET 
+            	monitor_name=#monitorName#,
+            	monitor_customer_name=#monitorCustomerName#,
+            	monitor_customer_id=#monitorCustomerId#,
+            	monitor_warehouse_id_list=#monitorWarehouseIdList#,
+            	monitor_warehouse_name_list=#monitorWarehouseNameList#,
+            	monitor_status=#monitorStatus#,
+            	monitor_start_time=#monitorStartTime#,
+            	monitor_index_list=#monitorIndexList#,
+            	monitor_sku=#monitorSku#
+            WHERE
+            	monitor_id=#monitorId#
+        ]]>
+	</update>
+	
+	<insert id="INSERT_USER" parameterClass="monitor">
+		<![CDATA[
+            INSERT INTO 
+            	monitor (monitor_name,monitor_customer_name,monitor_customer_id,monitor_warehouse_id_list,monitor_warehouse_name_list,monitor_status,monitor_start_time,monitor_index_list,monitor_responser_id,monitor_sku) 
+            VALUES 
+            	(#monitorName#,#monitorCustomerName#, #monitorCustomerId#,#monitorWarehouseIdList#,#monitorWarehouseNameList#,#monitorStatus#,#monitorStartTime#,#monitorIndexList#,#monitorResponserId#,#monitorSku#)
+         ]]>
+         <selectKey resultClass="Long" keyProperty="monitorId">
+            SELECT LAST_INSERT_ID() as monitorId
+        </selectKey>    
+		       
+	</insert>
+	
+	
+
+</sqlMap>

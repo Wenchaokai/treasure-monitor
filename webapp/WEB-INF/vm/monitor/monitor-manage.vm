@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>监控项目首页</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/pages.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/jiankong.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li>
+										<a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li>
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="layout">
+                   <div class="grid">
+                        <div class="mod-breadcrumb">
+                            <ul class="breadcrumb">
+                                <li>所有监控项目</li>
+                            </ul>
+                            <div class="action">
+								#if(${user.userRole}==1)
+									<a class="btn btn-primary" href="/monitor/monitor-add-view.do" target="_self"><i class="icon-plus icon-white"></i>新增监控项目</a>
+								#end
+                            </div>
+                        </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-monitor-list ui-table">
+                           <table class="ui-table table-monitor">
+                               <thead>
+                                    <tr>
+                                        <th class="num">序号</th>
+                                        <th class="name">
+                                            监控项目名称
+                                        </th>
+                                        <th class="customer">
+                                            监控客户
+                                        </th>
+                                        <th class="warehouse">
+                                            监控仓库
+                                        </th>
+                                        <th class="date">
+                                            监控开始日期
+                                        </th>
+                                        <th class="option">
+                                            操作
+                                        </th>
+                                    </tr>
+                               </thead>
+                               <tbody>
+									#if(${res.size()}>0)
+									  #set($index=1)
+                                      <tbody>
+                                        #foreach($monitor in $res)
+        									<tr>
+                                                <td>
+                                                    ${index}
+                                                </td>
+                                                <td>
+                                                    <a href="/monitor/monitor-view.do?monitor_id=${monitor.monitorId}" target="_self">${monitor.monitorName}</a>
+                                                </td>
+                                                <td>
+                                                    ${monitor.monitorCustomerName}
+                                                </td>
+                                                <td>
+                                                    ${monitor.monitorWarehouseNameList}
+                                                </td>
+                                                <td>
+                                                    ${monitor.monitorStartTime}
+                                                </td>
+                                                <td>
+													#if(${user.userRole}==1)
+														<a href="/monitor/monitor-update-view.do?monitor_id=${monitor.monitorId}" target="_self" class="action-update">修改</a>
+														<a href="javascript:if(confirm('确认删除吗?'))window.location='/monitor/monitor-delete.do?monitor_id=${monitor.monitorId}'" target="_self" class="action-update">删除</a>
+                                                    #end
+													<a href="/monitor/monitor-view.do?monitor_id=${monitor.monitorId}" target="_self" class="action-view">查看</a>
+                                                    <a href="/monitor/monitor-dingdan-view.do?monitor_id=${monitor.monitorId}" target="_blank" class="action-view-more">监控明细</a>
+                                                </td>
+                                            </tr>
+											#set($index=$index+1)
+        								#end              
+                                      </tbody>
+        							#end
+                                    
+                               </tbody>
+                           </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="layout">
+                  <div class="grid">
+					  <div class="mod-pages">
+                        <div class="content">
+    
+                            <div class="pagination pagination-large pagination-right">
+                                <ul>
+                                    
+                                    <li><a href="/monitor/monitor-manage.do?currentPage=${prePage}" target="_self">«</a></li>
+    								#set($nums=[${start} .. ${end}])
+    								#foreach($i in $nums)
+    									#if ($i==${currentPage})
+    										<li class="active"><a target="_self">$i</a></li>
+    									#else
+    										<li><a href="/monitor/monitor-manage.do?currentPage=$i">$i</a></li>
+    									#end
+    								#end
+    								<li><a href="/monitor/monitor-manage.do?currentPage=${nextPage}">»</a></li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+     </div>
+    <script src="/static/js/pages/jiankong.js"></script>
+</body>
+</html>

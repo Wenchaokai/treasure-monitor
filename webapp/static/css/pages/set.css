@@ -1,0 +1,23 @@
+.mod-set{
+    width:780px;
+    margin: 0 auto;
+}
+.mod-set .header{
+    border-bottom:1px solid #ddd;
+}
+.mod-set .header h2{
+    font-size: 18px;
+    margin-top: 0px;
+    line-height: 25px;
+}
+.mod-set .content{
+    padding-top: 20px;
+}
+.mod-set .btn{
+    padding: 10px 40px;
+    margin-right: 20px;
+}
+.mod-set .control-label span{
+    color:#cc0000;
+    padding-right: 2px;
+}

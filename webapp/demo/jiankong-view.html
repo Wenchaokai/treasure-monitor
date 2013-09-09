@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>查看监控项目</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/pages.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/pages/jiankong.css">
+    <script src="../static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i>欢迎来到监控宝!<a href="./login.html" target="_self" class="login">[登录]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="./index.html"><img src="../static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li>
+                                        <a href="index.html" target="_self">概述</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="./jiankong-index.html" target="_self">监控项目</a>
+                                    </li>
+                                    <li>
+                                        <a href="./warn.html" target="_self">告警</a>
+                                    </li>
+                                    <li>
+                                        <a href="./set.html" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="layout">
+                   <div class="grid">
+                        <div class="mod-breadcrumb">
+                            <ul class="breadcrumb">
+                                <li><a href="./jiankong-index.html">所有监控项目</a> <span class="divider">/</span></li>
+                                <li class="active">查看监控项目</li>
+                            </ul>
+                            <div class="action ui-hide">
+                                <a class="btn btn-primary" href="" target="_self"><i class="icon-plus icon-white"></i>新增监控项目</a>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-add-monitor">
+                          <div class="content">
+                              <form class="form-horizontal" action="#" method="post">
+                                  <div class="control-group">
+                                      <label class="control-label" for="monitorName">请输入监控项目名称：</label>
+                                      <div class="controls">
+                                          <input type="text" placeholder="请输入监控项目名称" name="monitorName" disabled value="小熊电器分仓监控">
+
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="selectCustomer">请选择您要监控的客户：</label>
+                                      <div class="controls">
+                                          <select name="selectCustomer" disabled>
+                                              <option>请选择客户</option>
+                                              <option selected>小熊电器</option>
+                                              <option>快活林</option>
+                                              <option>贝贝怡</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="">请选择您要监控的仓库：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled checked>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" checked disabled>
+                                                                上海新华传媒SAAS仓
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                宁波-艾维仓
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                河北-白沟仓
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                广州德迅SAAS-中山仓
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" checked disabled>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="" disabled>
+                                                                安海OFC仓库
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label control-label-left" for="">请选择监控指标：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                              <tr>
+                                                  <td>
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="" checked disabled>
+                                                          分仓SKU各仓库订单量
+                                                      </label>
+                                                  </td>
+                                                  <td>
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="" checked disabled>
+                                                          分仓SKU各仓库库存量
+                                                      </label>
+                                                  </td>
+                                                  <td>
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="" disabled>
+                                                          SKU订单来源的区域分布
+                                                      </label>
+                                                  </td>
+                                                  <td>
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="" disabled>
+                                                          分仓SKU与未分仓SKU关联销售情况
+                                                      </label>
+                                                  </td>
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="controls">
+                                          <a class="btn btn-primary btn-large" href="./jiankong-index.html">返回监控首页</a>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+     </div>
+    <script src="../static/js/pages/jiankong.js"></script>
+</body>
+</html>

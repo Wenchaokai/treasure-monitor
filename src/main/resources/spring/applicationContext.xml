@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-autowire="byName">
+	<context:annotation-config />
+	<context:component-scan base-package="com.best" />
+	<context:property-placeholder location="classpath:config/config.properties,classpath:config/jdbc.properties" />
+	
+	<!-- DataSource Start -->
+	<bean id="treasureDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc.driver}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_best.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_best.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_best.password}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${jdbc_best.validationQuery}</value>
+		</property>
+		<property name="testOnBorrow">
+			<value>${jdbc.testOnBorrow}</value>
+		</property>
+		<property name="initialSize">
+			<value>${jdbc.initialSize}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${jdbc.maxIdle}</value>
+		</property>
+	</bean>
+	
+	<!-- <bean id="ecbossuatDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc.driver}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_ecboss.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_ecboss.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_ecboss.password}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${jdbc_ecboss.validationQuery}</value>
+		</property>
+		<property name="testOnBorrow">
+			<value>${jdbc.testOnBorrow}</value>
+		</property>
+		<property name="initialSize">
+			<value>${jdbc.initialSize}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${jdbc.maxIdle}</value>
+		</property>
+	</bean> -->
+
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis/sqlMapConfig.xml" />
+		<property name="dataSource" ref="treasureDataSource" />
+	</bean>
+	
+	<!-- <bean id="ecbossSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis/sqlMapEotbossConfig.xml" />
+		<property name="dataSource" ref="ecbossuatDataSource" />
+	</bean> -->
+	<!-- DataSource End -->
+	
+	<!-- Memcached Start -->
+	<bean name="memcachedClient"  class="net.rubyeye.xmemcached.utils.XMemcachedClientFactoryBean">
+		<property name="servers">
+			<value>${memcached.server}</value>
+		</property>
+		<property name="connectionPoolSize" value="${memcached.connectionPoolSize}" />
+		<property name="sessionLocator">
+			<bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
+		</property>
+		<property name="transcoder">
+			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+		</property>
+		<property name="bufferAllocator">
+			<bean class="net.rubyeye.xmemcached.buffer.SimpleBufferAllocator"></bean>
+		</property>
+	</bean>
+	<!-- Memcached End -->
+	
+	<!--  Job Start -->
+	<bean id="SpringQtzJob" class="com.best.job.AlarmMonitorJob"/>  
+    <bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject" ref="SpringQtzJob" />  
+	    <property name="targetMethod" value="execute" />
+	</bean>
+    <bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
+	    <property name="cronExpression" value="0/5 * * * * ?"></property>  
+	</bean>
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="triggers">  
+	        <list>  
+	            <ref bean="CronTriggerBean"/>  
+	        </list>  
+	    </property>  
+	</bean>
+	<!--  Job End -->
+
+</beans>

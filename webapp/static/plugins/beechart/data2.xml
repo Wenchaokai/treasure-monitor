@@ -1,0 +1,22 @@
+<chart>
+    <data>
+        <indexAxis name="cc">
+            <labels>
+                Jan, Feb, Mar, Apr
+            </labels>
+        </indexAxis>
+        <valueAxis name="aa" unit="cc"></valueAxis>
+        <dataSets>
+            <set name="Tokyo">
+                <values>
+                7.0, 6.9, 9.5, 14.5
+                </values>
+            </set>
+            <set name="London">
+                <values>
+                3.9, 4.2, 5.7, 8.5
+                </values>
+            </set>
+        </dataSets>
+    </data>
+</chart>

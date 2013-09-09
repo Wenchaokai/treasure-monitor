@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>BeeChart Demo</title>
+    <script src="http://sjpsega.github.com/beechart/js/beechart/jquery-1.7.2.js"></script>
+    <script src="http://sjpsega.github.com/beechart/js/beechart/flash.js"></script>
+</head>
+<body>
+    <div id="chart-container"></div>
+    <script>
+       jQuery(function($){
+            $('#chart-container').flash({ 
+               swf        : 'beechart-bar.swf',
+               width      : 900,
+               height     : 400, 
+               flashvars  : { 
+                  dataUrl : 'data2.xml',
+                  h:300,
+                  w:800
+               } 
+            }); 
+       });
+    </script>
+</body>
+</html>

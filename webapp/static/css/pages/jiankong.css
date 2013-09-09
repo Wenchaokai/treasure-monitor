@@ -1,0 +1,141 @@
+.mod-monitor-list{
+
+}
+.mod-monitor-list  .table-monitor .num{
+    width: 40px;
+}
+.mod-monitor-list  .table-monitor .name{
+    width: 176px;
+}
+.mod-monitor-list  .table-monitor .customer{
+    width: 150px;
+}
+.mod-monitor-list  .table-monitor .warehouse{
+    width:230px;
+}
+.mod-monitor-list  .table-monitor .state{
+    width:80px;
+}
+.mod-monitor-list  .table-monitor .date{
+    width:100px;
+}
+.mod-monitor-list  .table-monitor .option{
+    width:190px;
+}
+.warehouse-select{
+    border:1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f7f7f9;
+}
+.mod-add-monitor .btn{
+    padding: 10px 40px;
+    margin-right: 20px;
+}
+
+.warehouse-select .ui-table-base{
+
+}
+.warehouse-select .ui-table-base td{
+    height: 34px;
+}
+
+/***监控明细***/
+.mod-monitor-detail{
+    border-top:2px solid #08c;
+}
+.mod-monitor-detail .form-monitor-detail{
+    margin-bottom: 0px;
+}
+.mod-monitor-detail .control-group{
+    margin-bottom: 10px;
+}
+.mod-monitor-detail .control-group-kpi{
+    height: 40px;
+    padding-top: 10px;
+    border-bottom:1px dotted #ddd;
+}
+.mod-monitor-detail .form-horizontal .control-label{
+    width: 120px;
+}
+.mod-monitor-detail .form-horizontal .controls{
+    margin-left: 120px;
+}
+.mod-monitor-detail  .control-group-other {
+    height: 40px;
+}
+.mod-monitor-detail  .control-group-other .select-sku{
+    width:200px;
+
+}
+.mod-monitor-detail  .control-group-other .select-show-type{
+    width: 80px;
+}
+.mod-monitor-detail  .control-group-other .btn{
+    margin-left: 5px;
+}
+.mod-monitor-detail  .control-group-other  .help-inline{
+    padding-left: 1px;
+}
+.table-monitor-detail .date{
+    width: 100px;
+}
+.table-monitor-detail .total{
+    width: 100px;
+}
+.mod-alert{
+    margin-top: 10px;
+}
+.laiyuan,
+.laiyuan .sku-map{
+    width: 990px;
+    height: 700px;
+}
+.laiyuan .BMap_stdMpCtrl{
+    display: none;
+}
+.wrap-laiyuan{
+    position: relative;
+    width: 990px;
+    height: 700px;
+}
+.wrap-laiyuan .rate-show{
+    height:140px;
+    width: 100px;
+    position: absolute;
+    bottom:30px;
+    left:120px;
+    z-index: 10;
+    background-color: #eee;
+}
+.wrap-laiyuan .rate-show ul{
+    margin-left: 0px;
+}
+.wrap-laiyuan .rate-show li{
+    height: 26px;
+    list-style: none;
+    line-height: 29px;
+    position: relative;
+    padding-left: 40px;
+    color: #0e0e0e;
+    font-size: 10px;
+}
+.wrap-laiyuan .rate-show li .block{
+    width:26px;
+    height: 20px;
+    background-color: #ccc;
+    display: block;
+    position: absolute;
+    top:4px;
+    left:8px;
+}
+.wrap-laiyuan  .about-project{
+    position: absolute;
+    right:40px;
+    bottom:140px;
+    background-color: #eee;
+    padding:10px 16px 8px 16px;
+    font-size: 12px;
+}

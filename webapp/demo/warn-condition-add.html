@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新增告警条件</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/pages/warn.css">
+    <script src="../static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i>欢迎来到监控宝!<a href="./login.html" target="_self" class="login">[登录]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="./index.html"><img src="../static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li class="">
+                                        <a href="index.html" target="_self">概述</a>
+                                    </li>
+                                    <li>
+                                        <a href="./jiankong-index.html" target="_self">监控项目</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="./warn.html" target="_self">告警</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="./set.html" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="grid-sub">
+                          <div class="mod-side-nav">
+                              <div class="content">
+                                  <ul>
+                                      <li>
+                                         <a href="./warn.html">
+                                             告警消息
+                                         </a>
+                                      </li>
+                                      <li>
+                                          <a href="warn-condition-manage.html" class="active">告警条件管理</a>
+                                      </li>
+                                      <li class="hide">
+                                          <a href="./warn-type.html">告警方式</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="grid-main">
+                            <div class="wrap clearfix">
+                                <ul class="breadcrumb">
+                                    <li><a href="warn-condition-manage.html">告警条件管理</a> <span class="divider">/</span></li>
+                                    <li class="active">新增告警条件</li>
+                                </ul>
+
+                                <div class="mod-warn-condition-add">
+                                    <div class="content">
+                                        <form class="form-horizontal">
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控项目：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" style="width:250px;">
+                                                        <option>请选择监控项目</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控指标：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" style="width:250px;">
+                                                        <option>请选择监控指标</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控仓库：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" style="width:250px;">
+                                                        <option>所有仓库</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label help-block" for="">设置监控区域：</label>
+                                                <div class="controls">
+                                                    <div class="monitor-area-container">
+                                                        <table class="ui-table-base">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        浙江
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        广东
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        上海
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        南京
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="">
+                                                                        北京
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控SKU：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" style="width:250px;">
+                                                        <option>所有SKU</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label help-block " for="">请设置触发条件：</label>
+                                                <div class="controls">
+                                                    <span class="help-inline">连续：</span>
+                                                    <div class="input-append inline">
+                                                        <input size="16" id="date-num" type="text" value="" style="width:50px">
+                                                    </div>
+                                                    <select style="width:50px;">
+                                                        <option>日</option>
+                                                    </select>
+                                                    <select style="width:50px;">
+                                                        <option>></option>
+                                                        <option>＜</option>
+                                                        <option>=</option>
+                                                        <option>≥</option>
+                                                        <option>≤</option>
+                                                    </select>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:100px">
+                                                    </div>
+                                                    <select style="width:50px;">
+                                                        <option>件</option>
+                                                        <option>单</option>
+                                                        <option>%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">设置触发的告警消息：</span>
+                                                <div class="controls2">
+                                                    <textarea rows="3" class="span10">分仓产品[sku-Name]，在[ofc-Name]的每日订单量已经连续[date-Num][date-Unit][compare-Unit][warning-Value][warning-Value-Unit]，请知晓！
+                                                    </textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">告警消息中的变量设置如下：</span>
+                                                <div class="controls2">
+                                                     <table class="ui-table ui-table-var">
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    SKU名称：[sku-Name]
+                                                                </td>
+                                                                <td>
+                                                                    仓库名称：[ofc-Name]
+                                                                </td>
+                                                                <td>
+                                                                    天/月数：[date-Num]
+                                                                </td>
+                                                                <td>
+                                                                    日期单位：[date-Unit]
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    比较单位：[compare-Unit]
+                                                                </td>
+                                                                <td>
+                                                                    阀值：[warning-Value]
+                                                                </td>
+                                                                <td colspan="2">
+                                                                    阀值单位：[warning-Value-Unit]
+                                                                </td>
+
+                                                            </tr>
+                                                         </tbody>
+                                                     </table>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">请设置告警方式：</span>
+                                                <div class="controls2">
+                                                    <label class="checkbox inline">
+                                                        <input type="checkbox" id="inlineCheckbox1" value="option1">短信发送到
+                                                    </label>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入11位手机号码">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入11位手机号码">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入11位手机号码">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入11位手机号码">
+                                                    </div>
+                                                </div>
+                                                <div class="controls2" style="margin-top: 8px;">
+                                                    <label class="checkbox inline">
+                                                        <input type="checkbox" id="inlineCheckbox1" value="option1">邮件发送到
+                                                    </label>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入邮件地址">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入邮件地址">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入邮件地址">
+                                                    </div>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" value="" style="width:140px" placeholder="请输入邮件地址">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">开启状态：</label>
+                                                <div class="controls">
+                                                    <label class="checkbox inline">
+                                                        <input type="radio" name="isopen" value="option1">&nbsp;&nbsp;开启
+                                                    </label>
+                                                    <label class="checkbox inline">
+                                                        <input type="radio" id="isopen" value="option2">&nbsp;&nbsp;不开启
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    <button type="submit" class="btn btn-primary">新增</button>
+                                                    <a class="btn btn-danger btn-large" href="#">取消</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="../static/plugins/charts/ficharts/FiCharts.js"></script>
+    <script src="../static/js/pages/gaishu.js"></script>
+</body>
+</html>

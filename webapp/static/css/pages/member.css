@@ -1,0 +1,26 @@
+.mod-member-manage .ui-table th.account{
+
+}
+.mod-member-manage .ui-table th.name{
+    width: 140px;
+}
+.mod-member-manage .ui-table th.role{
+    width: 150px;
+}
+.mod-member-manage .ui-table th.opration{
+    width: 200px;
+}
+.mod-member-manage .btn-del{
+    margin-left: 10px;
+}
+.mod-member-add .btn{
+    padding: 10px 40px;
+    margin-right: 20px;
+}
+.mod-no-result .no-result{
+    height: 40px;
+    line-height: 40px;
+    padding-top: 40px;
+    background: transparent url(../../img/pages/icon-no-result.png) no-repeat 140px 42px;
+    padding-left: 180px;
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="alertSpace">
+	<typeAlias alias="alertData" type="com.best.domain.AlertData" />
+
+	<resultMap class="alertData" id="allProperties">
+		<result property="alertId" column="alert_id" />
+		<result property="monitorId" column="monitor_id" />
+		<result property="monitorName" column="monitor_name" />
+		<result property="alertTime" column="alert_time" />
+		<result property="alertMsg" column="alert_msg" />
+	</resultMap>
+	
+	<select id="GET_ALERT_BY_PAGESIZE" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	alert_data
+            WHERE
+            	monitor_id=#monitorId#
+            ORDER BY 
+            	alert_id desc
+            LIMIT #start#,#pageSize#
+        ]]>
+	</select>
+	
+	<select id="GET_ALERT_BY_TOTALSIZE" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+            SELECT
+            	count(*)
+            FROM 
+            	alert_data
+            WHERE
+            	monitor_id=#monitorId#
+        ]]>
+	</select>
+	<insert id="INSERT_ALERTDATA" parameterClass="alertData">
+		<![CDATA[
+            INSERT INTO 
+            	alert_data (alert_time,alert_msg,monitor_id,monitor_name) 
+            VALUES 
+            	(#alertTime#,#alertMsg#, #monitorId#,#monitorName#)
+         ]]>
+         <selectKey resultClass="Long" keyProperty="alertId">
+            SELECT LAST_INSERT_ID() as alertId
+        </selectKey>   
+	</insert>
+	
+	
+
+</sqlMap>
