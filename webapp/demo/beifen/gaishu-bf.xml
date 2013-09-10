@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config precision="1" title="告警项目统计" subTitle="2013年度" ySuffix="个">
+    <legend enable="true"/>
+    <axis>
+        <x title="日期" type="field"/>
+        <y title="数量" type="linear"/>
+    </axis>
+    <series>
+        <column seriesName="监控项目数" xField="label" yField="valueA"/>
+        <column seriesName="告警项目数" xField="label" yField="valueB"/>
+    </series>
+    <data>
+        <item label="6/13" valueA="1" valueB="1"/>
+        <item label="6/14" valueA="20" valueB="2"/>
+        <item label="6/15" valueA="40" valueB="8"/>
+        <item label="6/16" valueA="50" valueB="10"/>
+        <item label="6/17" valueA="10" valueB="3"/>
+        <item label="6/18" valueA="20" valueB="2"/>
+        <item label="6/19" valueA="40" valueB="8"/>
+        <item label="6/20" valueA="100" valueB="10"/>
+    </data>
+</config>

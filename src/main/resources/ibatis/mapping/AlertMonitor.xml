@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="alertMonitorSpace">
+	<typeAlias alias="alertMonitor" type="com.best.domain.AlertMonitor" />
+
+	<resultMap class="alertMonitor" id="allProperties">
+		<result property="alertMonitorId" column="alert_monitor_id" />
+		<result property="monitorId" column="monitor_id" />
+		<result property="monitorName" column="monitor_name" />
+		<result property="alertMonitorIndex" column="alert_monitor_index" />
+		<result property="alertMonitorDay" column="alert_monitor_day" />
+		<result property="alertMonitorCompare" column="alert_monitor_compare" />
+		<result property="alertMonitorNum" column="alert_monitor_num" />
+		<result property="alertMonitorUnit" column="alert_monitor_unit" />
+		<result property="alertMonitorMsg" column="alert_monitor_msg" />
+		<result property="alertMonitorSms" column="alert_monitor_sms" />
+		<result property="alertMonitorEmail" column="alert_monitor_email" />
+		<result property="alertMonitorStatus" column="alert_monitor_status" />
+		<result property="alertMonitorSku" column="alert_monitor_sku" />
+		<result property="alertMonitorWareHouseCode" column="alert_monitor_warehouse_code" />
+		<result property="alertMonitorWareHouseName" column="alert_monitor_warehouse_name" />
+		<result property="alertMonitorDistrict" column="alert_monitor_district" />
+		<result property="count" column="count" />
+		<result property="alertMonitorEnableSms" column="alert_monitor_enable_sms" />
+		<result property="alertMonitorEnableEmail" column="alert_monitor_enable_email" />
+	</resultMap>
+	
+	<select id="FIND_ALERT_MONITOR" parameterClass="java.lang.Long" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	alert_monitor
+            WHERE
+            	alert_monitor_id=#alertMonitorId#
+        ]]>
+	</select>
+	
+	<select id="GET_ALERTMONITOR_BY_PAGESIZE_MONITORID" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	alert_monitor
+            WHERE
+            	monitor_id=#monitorId#
+            ORDER BY 
+            	alert_monitor_id desc
+        ]]>
+	</select>
+	
+	<select id="GET_ALERTMONITOR_BY_TOTALSIZE_MONITORID" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+            SELECT
+            	count(*)
+            FROM 
+            	alert_monitor
+            WHERE
+            	monitor_id=#monitorId#
+        ]]>
+	</select>
+	<select id="GET_ALL_ALERTMONITOR_BY_PAGESIZE" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	alert_monitor
+            ORDER BY 
+            	alert_monitor_id desc
+            LIMIT #start#,#pageSize#
+        ]]>
+	</select>
+	
+	<select id="GET_ALL_ALERTMONITOR_BY_TOTALSIZE_MONITORID" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+            SELECT
+            	count(*)
+            FROM 
+            	alert_monitor
+        ]]>
+	</select>
+	
+	<delete id="DELETE_MONITOR" parameterClass="java.lang.Long">
+		<![CDATA[
+            DELETE FROM 
+            	alert_monitor
+            WHERE 
+            	monitor_id=#monitorId#
+        ]]>
+	</delete>
+	
+	<delete id="DELETE_ALERTMONITOR" parameterClass="java.lang.Long">
+		<![CDATA[
+            DELETE FROM 
+            	alert_monitor
+            WHERE 
+            	alert_monitor_id=#alertMonitorId#
+        ]]>
+	</delete>
+	
+	<insert id="INSERT_ALERTMONITOR" parameterClass="alertMonitor">
+		<![CDATA[
+            INSERT INTO 
+            	alert_monitor 
+            	(monitor_id,alert_monitor_day,alert_monitor_compare,alert_monitor_num,alert_monitor_unit,alert_monitor_msg,alert_monitor_sms,alert_monitor_email,alert_monitor_status,monitor_name,alert_monitor_index,alert_monitor_warehouse_code,alert_monitor_warehouse_name,alert_monitor_sku,alert_monitor_district,alert_monitor_enable_sms,alert_monitor_enable_email) 
+            VALUES 
+            	(#monitorId#,#alertMonitorDay#,#alertMonitorCompare#,#alertMonitorNum#,#alertMonitorUnit#,#alertMonitorMsg#,#alertMonitorSms#,#alertMonitorEmail#,#alertMonitorStatus#,#monitorName#,#alertMonitorIndex#,#alertMonitorWareHouseCode#,#alertMonitorWareHouseName#,#alertMonitorSku#,#alertMonitorDistrict#,#alertMonitorEnableSms#,#alertMonitorEnableEmail#)
+         ]]>
+         <selectKey resultClass="Long" keyProperty="alertMonitorId">
+            SELECT LAST_INSERT_ID() as alertMonitorId
+        </selectKey>   
+	</insert>
+	
+	<update id="UPDATE_ALERTMONITOR" parameterClass="alertMonitor">
+		<![CDATA[
+			UPDATE
+				alert_monitor
+			SET
+				monitor_id=#monitorId#,
+				alert_monitor_day=#alertMonitorDay#,
+				alert_monitor_compare=#alertMonitorCompare#,
+				alert_monitor_num=#alertMonitorNum#,
+				alert_monitor_unit=#alertMonitorUnit#,
+				alert_monitor_msg=#alertMonitorMsg#,
+				alert_monitor_sms=#alertMonitorSms#,
+				alert_monitor_email=#alertMonitorEmail#,
+				alert_monitor_status=#alertMonitorStatus#,
+				monitor_name=#monitorName#,
+				alert_monitor_index=#alertMonitorIndex#,
+				alert_monitor_warehouse_code=#alertMonitorWareHouseCode#,
+				alert_monitor_warehouse_name=#alertMonitorWareHouseName#,
+				alert_monitor_sku=#alertMonitorSku#,
+				alert_monitor_district=#alertMonitorDistrict#,
+				alert_monitor_enable_sms=#alertMonitorEnableSms#,
+				alert_monitor_enable_email=#alertMonitorEnableEmail#
+			WHERE
+				alert_monitor_id=#alertMonitorId#
+		]]>
+	</update>
+	
+	
+
+</sqlMap>

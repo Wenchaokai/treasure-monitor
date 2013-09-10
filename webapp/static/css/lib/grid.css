@@ -1,0 +1,15 @@
+.layout{
+       *zoom: 1;
+}
+.grid{
+    width: 990px;
+    margin: 0 auto;
+    *zoom:1;
+}
+.layout:after,
+.grid:after{
+    display:block;
+    clear:both;
+    height:0;
+    content:"\0020";
+}

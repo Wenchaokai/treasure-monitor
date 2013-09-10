@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>查看监控项目</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/pages.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/jiankong.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li>
+										<a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li>
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="layout">
+                   <div class="grid">
+                        <div class="mod-breadcrumb">
+                            <ul class="breadcrumb">
+                                <li><a href="/monitor/monitor-manage.do">所有监控项目</a> <span class="divider">/</span></li>
+                                <li class="active">查看监控项目</li>
+                            </ul>
+                            <div class="action ui-hide">
+                                <a class="btn btn-primary" href="/monitor/monitor-add-view.do" target="_self"><i class="icon-plus icon-white"></i>新增监控项目</a>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-add-monitor">
+                          <div class="content">
+                              <form class="form-horizontal" action="#" method="post">
+                                  <div class="control-group">
+                                      <label class="control-label" for="monitorName">请输入监控项目名称：</label>
+                                      <div class="controls">
+                                          <input type="text" placeholder="请输入监控项目名称" name="monitorName" disabled value="${res.monitorName}">
+
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="selectCustomer">请选择您要监控的客户：</label>
+                                      <div class="controls">
+                                          <select name="selectCustomer" disabled>
+                                              <option>请选择客户</option>
+                                              <option selected>${res.monitorCustomerName}</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="">请选择您要监控的仓库：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                                    #foreach($warehouseList in $wareHouses)
+													<tr>
+													#foreach($wareHouse in $warehouseList)
+                                                        <td>
+                                                            <label class="checkbox">
+																#if (${wareHouse.checked})
+																	<input type="checkbox" name="wareHouse" value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" checked disabled>${wareHouse.wareHouseName}
+																#else 
+																	<input type="checkbox" name="wareHouse" value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" disabled>${wareHouse.wareHouseName}
+																#end
+                                                            </label>
+                                                        </td>
+													#end
+													</tr>
+												#end
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+								  <div class="control-group">
+                                      <label  for="">请设置您要监控的分仓SKU编码（若有多个SKU，则以“；”分隔）：</label>
+                                  </div>
+								  <div class="">
+									<textarea id="sku" name="sku" class="u84" style="width: 936px; height: 62px;" disabled>${res.monitorSku}</textarea>
+								  </div>
+                                  <div class="control-group">
+                                      <label class="control-label control-label-left" for="">请选择监控指标：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                              <tr>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(1)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="1" checked disabled>
+                                                          分仓SKU各仓库订单量
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" value="1" disabled>
+                                                          分仓SKU各仓库订单量
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(2)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="2" checked disabled>
+                                                          分仓SKU各仓库库存量
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" value="2" disabled>
+                                                          分仓SKU各仓库库存量
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(3)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="3" checked disabled>
+                                                          SKU订单来源的区域分布
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" value="3" disabled>
+                                                          SKU订单来源的区域分布
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(4)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" value="4" checked disabled>
+                                                          分仓SKU与未分仓SKU关联销售情况
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" value="4" disabled>
+                                                          分仓SKU与未分仓SKU关联销售情况
+                                                      </label>
+													#end
+                                                  </td>
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="controls">
+                                          <a class="btn btn-primary btn-large" href="/monitor/monitor-manage.do">返回监控首页</a>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+     </div>
+    <script src="/static/js/pages/jiankong.js"></script>
+</body>
+</html>

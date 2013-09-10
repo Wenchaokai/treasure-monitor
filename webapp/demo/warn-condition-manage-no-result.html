@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>告警条件管理-搜索无结果</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/pages/warn.css">
+    <script src="../static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i>欢迎来到监控宝!<a href="./login.html" target="_self" class="login">[登录]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="./index.html"><img src="../static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li class="">
+                                        <a href="index.html" target="_self">概述</a>
+                                    </li>
+                                    <li>
+                                        <a href="./jiankong-index.html" target="_self">监控项目</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="./warn.html" target="_self">告警</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="./set.html" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="grid-sub">
+                          <div class="mod-side-nav">
+                              <div class="content">
+                                  <ul>
+                                      <li>
+                                         <a href="./warn.html">
+                                             告警消息
+                                         </a>
+                                      </li>
+                                      <li>
+                                          <a href="./warn-condition-manage.html" class="active">告警条件管理</a>
+                                      </li>
+                                      <li class="hide">
+                                          <a href="./warn-type.html">告警方式</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="grid-main">
+                            <div class="wrap clearfix">
+                                <div class="mod-warn-set">
+                                    <div class="header">
+                                        <form class="form-horizontal">
+                                            <div class="control-group">
+                                                <label class="control-label control-label-left"><h5>
+                                                    所有告警条件</h5></label>
+                                                <div class="controls control-right">
+                                                    <span class="help-inline">选择监控项目：</span>
+                                                    <select class="select-sku" style="width:250px;">
+                                                        <option>3423424234/活性炭</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary">查找</button>
+                                                    <a class="btn btn-warning" href="./warn-condition-add.html" target="_self"><i class="icon-plus icon-white"></i>新增告警条件</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="mod-warn-condition-manage">
+                                    <div class="content">
+                                        <table class="ui-table">
+                                            <thead>
+                                                <tr>
+
+                                                    <th class="monitor-project">
+                                                        监控项目
+                                                    </th>
+                                                    <th class="kpi">
+                                                        监控指标
+                                                    </th>
+                                                    <th class="condition">
+                                                        条件
+                                                    </th>
+                                                    <th class="message">
+                                                        告警消息
+                                                    </th>
+                                                    <th class="isopen">
+                                                        开启?
+                                                    </th>
+                                                    <th class="opration">
+                                                        操作
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mod-no-result">
+                                    <div class="content">
+                                        <p class="no-result">抱歉！无符合条件的查询结果。请修改查询条件，重新搜索！</p>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="../static/plugins/charts/ficharts/FiCharts.js"></script>
+    <script src="../static/js/pages/gaishu.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新增会员</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="../static/css/pages/member.css">
+    <script src="../static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+<div class="doc" id="doc">
+<div class="topbar" id="topbar">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-toolbar">
+                <p><i class="icon-user"></i>欢迎来到监控宝!<a href="#" target="_self" class="login">[登录]</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="header" id="header">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-masthead">
+                <a href="./index.html"><img src="../static/img/logo.png" width="312" height="80"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content" id="content">
+<div class="layout layout-nav">
+    <div class="grid">
+        <div class="mod-nav" id="mod-nav">
+            <div class="content">
+                <ul>
+                    <li class="">
+                        <a href="index.html" target="_self">概述</a>
+                    </li>
+                    <li>
+                        <a href="./jiankong-index.html" target="_self">监控项目</a>
+                    </li>
+                    <li>
+                        <a href="./warn.html" target="_self">告警</a>
+                    </li>
+                    <li class="active">
+                        <a href="./set.html" target="_self" class="">设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layout">
+    <div class="grid">
+        <div class="grid-sub">
+            <div class="mod-side-nav">
+                <div class="content">
+                    <ul>
+                        <li>
+                            <a href="./set.html" class="active">
+                                修改密码
+                            </a>
+                        </li>
+                        <li>
+                            <a href="member-manage.html">会员管理</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="grid-main">
+            <div class="wrap clearfix">
+                <div class="mod-member-add">
+                    <div class="header">
+                        <ul class="breadcrumb">
+                            <li><a href="./member-manage.html">会员管理</a> <span class="divider">/</span></li>
+                            <li class="active">新增会员</li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal" method="post">
+                            <div class="control-group error">
+                                <label class="control-label" for="account">登录账号：</label>
+                                <div class="controls">
+                                    <input type="text" id="account" name="account" placeholder="请登录账号"/>
+                                    <span class="help-inline">请登录账号</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="pwd">登录密码：</label>
+                                <div class="controls">
+                                    <input type="password" id="pwd" name="pwd" placeholder="请登录密码"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="role">角色：</label>
+                                <div class="controls">
+                                    <label class="radio inline">
+                                        <input type="radio" id="" name="role" value="option1"> 管理员
+                                    </label>
+                                    <label class="radio inline">
+                                        <input type="radio" name="role" value="option2"> 普通用户
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-primary">新增</button>
+                                    <button type="reset" class="btn btn-warning">取消</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                 </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<div class="footer clearfix" id="footer">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-footer">
+                <div class="content">
+                    <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<script src="../static/js/pages/set.js"></script>
+</body>
+</html>

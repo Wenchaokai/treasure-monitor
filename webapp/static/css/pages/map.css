@@ -1,0 +1,61 @@
+html{color:#000;overflow-y:scroll;background:#fff}body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,fieldset,lengend,button,input,textarea,form,th,td{margin:0;padding:0}body,button,input,select,textarea{font:12px/1.5 Tahoma,Arial,"\5b8b\4f53",sans-serif}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}address,cite,dfn,em,var{font-style:normal}code,kbd,pre,samp,tt{font-family:"Courier New",Courier,monospace}small{font-size:12px}ul,ol{list-style:none}a{text-decoration:none}a:hover{text-decoration:underline;color:#ff7300}abbr[title],acronym[title]{border-bottom:1px dotted;cursor:help}q:before,q:after{content:''}:focus{outline:0}legend{color:#000}fieldset,img{border:0}button,input,select,textarea{font-size:100%}table{border-collapse:collapse;border-spacing:0}hr{border:0;height:1px;*color:#fff}img{-ms-interpolation-mode:bicubic}
+body{
+	font-size:12px;
+}
+.doc{
+	width:990px;height:700px;
+	overflow:hidden;
+}
+.doc .wrap{
+	width:990px;height:700px;
+	position:relative;
+}
+
+.doc .rate-show{
+	height:140px;
+	width: 100px;
+	position: absolute;
+	bottom:40px;
+	left:150px;
+	z-index: 10;
+	background-color: #eee;
+    border-radius: 4px;
+}
+.doc .rate-show ul{
+	margin-left: 0px;
+}
+.doc .rate-show li{
+	height: 26px;
+	list-style: none;
+	line-height: 29px;
+	position: relative;
+	padding-left: 40px;
+	color: #0e0e0e;
+	font-size: 10px;
+}
+.doc .rate-show li .block{
+	width:26px;
+	height: 20px;
+	background-color: #ccc;
+	display: block;
+	position: absolute;
+	top:4px;
+	left:8px;
+}
+.doc  .about-project{
+	position: absolute;
+	right:40px;
+	bottom:140px;
+	background-color: #eee;
+	padding:10px 16px 8px 16px;
+	font-size: 12px;
+    border-radius: 4px;
+}
+
+#map_container{
+	width:990px;height:700px;
+}
+.anchorBL,
+.BMap_cpyCtrl{
+	display:none;
+}

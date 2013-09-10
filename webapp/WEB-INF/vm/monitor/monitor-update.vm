@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>修改监控项目</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/pages.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/jiankong.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="../static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li>
+										<a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li>
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="layout">
+                   <div class="grid">
+                        <div class="mod-breadcrumb">
+                            <ul class="breadcrumb">
+                                <li><a href="/monitor/monitor-manage.do">所有监控项目</a> <span class="divider">/</span></li>
+                                <li class="active">更新监控项目</li>
+                            </ul>
+                            <div class="action ui-hide">
+                                <a class="btn btn-primary" href="/monitor/monitor-add.do" target="_self"><i class="icon-plus icon-white"></i>更新监控项目</a>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-add-monitor">
+                          <div class="content">
+                              <form class="form-horizontal" id="monitor-form" name="monitor-form"  action="/monitor/monitor-update.do" method="post">
+								<input type="text" class="hide" placeholder="请输入监控项目名称" name="monitorId" id="monitorId" value="${res.monitorId}">
+                                  <div class="control-group">
+                                      <label class="control-label" for="monitorName">请输入监控项目名称：</label>
+                                      <div class="controls">
+                                          <input type="text" placeholder="请输入监控项目名称" name="monitorName" id="monitorName" value="${res.monitorName}">
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="selectCustomer">请选择您要监控的客户：</label>
+                                      <div class="controls">
+                                          <select name="selectCustomer" id="selectCustomer">
+                                              #foreach($customer in $customers)
+												#if (${customer.customerCode}==${monitorCustomerCode})
+													<option value="${customer.customerCode}#${customer.customerName}" selected>${customer.customerName}</option>
+												#else
+													<option value="${customer.customerCode}#${customer.customerName}">${customer.customerName}</option>
+												#end
+											  #end
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label class="control-label" for="">请选择您要监控的仓库：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                                    #foreach($warehouseList in $wareHouses)
+													<tr>
+													#foreach($wareHouse in $warehouseList)
+                                                        <td>
+                                                            <label class="checkbox">
+																#if (${wareHouse.checked})
+																	<input type="checkbox" name="wareHouse" value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" checked>${wareHouse.wareHouseName}
+																#else 
+																	<input type="checkbox" name="wareHouse" value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" >${wareHouse.wareHouseName}
+																#end
+                                                            </label>
+                                                        </td>
+													#end
+													</tr>
+												#end
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+								  <div class="control-group">
+                                      <label  for="">请设置您要监控的分仓SKU编码（若有多个SKU，则以“；”分隔）：</label>
+                                  </div>
+								  <div class="">
+									<textarea id="sku" name="sku" class="u84" style="width: 936px; height: 62px;">${res.monitorSku}</textarea>
+								  </div>
+                                  <div class="control-group">
+                                      <label class="control-label control-label-left" for="">请选择监控指标：</label>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="warehouse-select clearfix" id="warehouse-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+                                              <tr>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(1)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="1" checked >
+                                                          分仓SKU各仓库订单量
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="1" >
+                                                          分仓SKU各仓库订单量
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(2)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="2" checked >
+                                                          分仓SKU各仓库库存量
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="2" >
+                                                          分仓SKU各仓库库存量
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(3)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="3" checked >
+                                                          SKU订单来源的区域分布
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="3" >
+                                                          SKU订单来源的区域分布
+                                                      </label>
+													#end
+                                                  </td>
+                                                  <td>
+													#if(${res.monitorIndexSet.contains(4)})
+                                                      <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="4" checked >
+                                                          分仓SKU与未分仓SKU关联销售情况
+                                                      </label>
+													#else
+													  <label class="checkbox">
+                                                          <input type="checkbox" name="norm" value="4" >
+                                                          分仓SKU与未分仓SKU关联销售情况
+                                                      </label>
+													#end
+                                                  </td>
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <div class="controls">
+                                          <button type="submit" class="btn btn-primary btn-large">确定</button>
+                                          <a class="btn btn-danger btn-large" href="javascript:history.go(-1);">取消</a>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+     </div>
+    <script src="/static/js/pages/jiankong.js"></script>
+	<script src="/static/js/pages/monitor.js"></script>
+</body>
+</html>

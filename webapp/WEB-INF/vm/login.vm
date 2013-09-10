@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>登录页面</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/login.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i>欢迎来到监控宝! <a href="/login.do" target="_self" class="login">[登录]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/login.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-banner">
+                   <div class="grid">
+                       <div class="mod-login">
+                            <div class="content">
+                                <div class="login-box">
+                                    <div class="wrap clearfix">
+                                        <form action="/user/checkUser.do" method="post" id="login-form" class="ui-form">
+                                            <fieldset>
+                                                <legend>用户登录 </legend>
+                                                <div class="ui-form-content">
+													#if(!${errorLogin})
+														<span class="label label-important label-error hide" id="label-error-box"><i class=" icon-remove icon-white"></i><span class="info">请输入用户名</span></span>
+													#else
+														<span class="label label-important label-error" id="label-error-box"><i class=" icon-remove icon-white"></i><span class="info">用户名密码错误，请重新输入</span></span>
+													#end
+                                                    <label for="userName">用户名：</label>
+													#if(!${userCount})
+														<input type="text" placeholder="请输入用户名" name="userName" id="userName">
+													#else
+														<input type="text" value="${userCount}" name="userName" id="userName">
+													#end
+                                                    <label for="pwd">密码：</label>
+                                                    <input type="password" placeholder="请输入密码" name="password" id="pwd">
+                                                    <span class="label label-important hide" id="label-pwd">请输入密码。</span>
+                                                    <label class="checkbox hide">
+                                                        <input type="checkbox">记住用户名
+                                                    </label>
+                                                    <button type="submit" class="btn btn-block btn-primary">登录</button>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+
+              <div class="layout">
+                   <div class="grid">
+                       <div class="mod-about-jkb">
+                           <div class="content">
+                               <dl class="list">
+                                   <dd class="item">
+                                       <h2 class="data">
+                                           完善的数据，运作尽在掌握中！
+                                       </h2>
+                                       <ul>
+                                           <li>
+                                               • 分仓SKU各仓库订单量
+                                           </li>
+                                           <li>
+                                               • 分仓SKU各仓库库存量
+                                           </li>
+                                           <li>
+                                               • SKU订单来源区域分布
+                                           </li>
+                                           <li>
+                                               • 分仓SKU关联销售情况
+                                           </li>
+                                       </ul>
+                                   </dd>
+                                   <dd class="item">
+                                       <h2 class="monitor">及时的预警，异常从此不再愁！</h2>
+                                       <ul>
+                                           <li>
+                                               • 仓库订单量过多/少时预警
+                                           </li>
+                                           <li>
+                                               • 仓库库存量低于警戒线预警
+                                           </li>
+                                           <li>
+                                               • 智能分析SKU订单分布
+                                           </li>
+                                           <li>
+                                               • 分析关联销售情况,智能建议
+                                           </li>
+                                       </ul>
+                                   </dd>
+                                   <dd class="item">
+                                       <h2 class="service">
+                                           个性的服务，用户体验优优优！
+                                       </h2>
+                                       <ul>
+                                           <li>
+                                               • 不同账号不同权限
+                                           </li>
+                                           <li>
+                                               • 自行设置告警标准/方式/内容
+                                           </li>
+                                           <li>
+                                               • 个性化的展现方案
+                                           </li>
+                                           <li>
+                                               • 自行选择监控项目
+                                           </li>
+                                       </ul>
+                                   </dd>
+                               </dl>
+                           </div>
+                       </div>
+                   </div>
+
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="/static/js/pages/login.js"></script>
+</body>
+</html>

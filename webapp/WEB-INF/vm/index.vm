@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>概述</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/gaishu.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+									<li class="active">
+                                        <a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li>
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li>
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="layout">
+                   <div class="grid">
+                       <div class="mod-hello">
+                           <div class="content">
+                               <h1>您好！欢迎回来！</h1>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-warn-project">
+                          <div class="header">
+                              <div class="wrap">
+                                  <button class="btn btn-primary" type="button" id="last-7day" data-url="/json/${current-1}">最近7天</button>
+                                  <select name="select-week" id="select-week">
+                                      <option value="/json/${current-1}">最近第一周</option>
+                                      <option value="/json/${current-2}">最近第二周</option>
+                                      <option value="/json/${current-3}">最近第三周</option>
+                                      <option value="/json/${current-4}">最近第四周</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="content">
+                              <div class="chart" id="chart" data-url="/json/${current-1}">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="/static/plugins/beechart/flash.js"></script>
+    <script src="/static/js/pages/gaishu.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="wareHouseSpace">
+	<typeAlias alias="wareHouse" type="com.best.domain.WareHouse" />
+
+	<resultMap class="wareHouse" id="allProperties">
+		<result property="id" column="ID" />
+		<result property="wareHouseName" column="WAREHOUSENAME" />
+		<result property="wareHouseCode" column="WAREHOUSECODE"/>
+	</resultMap>
+	
+	<select id="GET_ALL_WAREHOUSE" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	ID,WAREHOUSENAME,WAREHOUSECODE
+            FROM 
+            	ECBOSS_WAREHOUSE
+            ORDER BY 
+            	id
+            LIMIT #start#,#pageSize#
+        ]]>
+	</select>
+
+</sqlMap>

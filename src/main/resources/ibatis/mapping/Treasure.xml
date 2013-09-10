@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="treasureSpace">
+	<typeAlias alias="treasure" type="com.best.domain.Treasure" />
+
+	<resultMap class="treasure" id="allProperties">
+		<result property="id" column="id" />
+		<result property="dateTime" column="date_time" />
+		<result property="monitorNums" column="monitor_nums" />
+		<result property="alarmNums" column="alarm_nums" />
+	</resultMap>
+	
+	<insert id="INSERT_TREASURE" parameterClass="treasure">
+		<![CDATA[
+            INSERT INTO 
+            	treasure (date_time,monitor_nums, alarm_nums) 
+            VALUES 
+            	(#dateTime#,#monitorNums#, #alarmNums#)
+        ]]>
+	</insert>
+	
+	<update id="UPDATE_TREASURE" parameterClass="treasure">
+		<![CDATA[
+            UPDATE 
+            	treasure 
+            SET 
+            	monitor_nums = monitor_nums + #monitorNums#,
+            	alarm_nums = alarm_nums + #alarmNums#
+            WHERE
+            	date_time=#dateTime#
+        ]]>
+	</update>
+	
+	<select id="SELECT_NEAREST_TREASURE_SINGLE" parameterClass="java.lang.String" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	treasure
+            ORDER BY 
+            	date_time desc 
+            LIMIT 1
+        ]]>
+	</select>
+	
+	<select id="SELECT_TREASURE_SINGLE" parameterClass="java.lang.String" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	treasure
+            WHERE
+        		date_time=#dateTime#
+        ]]>
+	</select>
+	
+	<select id="SELECT_TREASURE" parameterClass="java.util.List" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	treasure
+            WHERE
+        		date_time in 
+        ]]>
+        <iterate open="(" close=")" conjunction=",">  
+            #[]#  
+        </iterate>  
+	</select>
+
+</sqlMap>

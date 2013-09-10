@@ -1,0 +1,41 @@
+.layout-nav{
+    border-bottom:2px solid #08c;
+}
+.mod-nav{
+    height: 40px;
+}
+.mod-nav ul{
+    margin-left: 0px;
+}
+.mod-nav li{
+    float: left;
+    width:120px;
+    height: 40px;
+    line-height: 40px;
+    list-style: none;
+    text-align: center;
+}
+.mod-nav li a:link,
+.mod-nav li a:visited{
+    color:#08c;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.mod-nav li.active{
+    background-color: #08c;
+}
+.mod-nav li.active a:link,
+.mod-nav li.active a:visited{
+    color:#fff;
+}
+.mod-breadcrumb{
+    margin-top: 10px;
+    height: 56px;
+    position: relative;
+}
+.mod-breadcrumb .action{
+    position: absolute;
+    top:4px;
+    right:12px;
+}

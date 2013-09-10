@@ -1,0 +1,77 @@
+.layout-banner{
+    background: transparent url(../../img/pages/login.jpg) no-repeat center 0px;
+}
+
+.mod-login{
+    height: 380px;
+    position: relative;
+}
+.mod-login .login-box{
+    position: absolute;
+    top:40px;
+    right: 40px;
+    width: 286px;
+    height: 387px;
+}
+.mod-login .login-box .wrap{
+    background:rgba(0,0,0,0.4);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#66000000',EndColorStr='#66000000')
+    width:287px;
+    overflow:hidden;
+}
+.mod-login .login-box form{
+    padding: 6px 14px;
+    color:#fff;
+}
+.mod-login .login-box form legend{
+    color:#fff;
+}
+.ui-form-content{
+    padding-left: 4px;
+}
+.mod-login .login-box form .btn{
+    padding: 7px 12px;
+    width:220px;
+}
+.mod-login .login-box form .label{
+    line-height: 15px;
+    padding: 4px 8px;
+}
+.mod-login .login-box form .label-error{
+     width: 200px;
+}
+.mod-about-jkb{
+
+}
+.mod-about-jkb .content{
+    height: 250px;
+    padding-top: 24px;
+}
+.mod-about-jkb dd.item{
+    float:left;
+    width: 310px;
+    margin-left: 0px;
+    padding-left: 20px;
+}
+.mod-about-jkb dd.item ul{
+    margin-left: 0px;
+}
+.mod-about-jkb dd.item li{
+    line-height: 26px;
+    padding-left: 20px;
+    list-style: none;
+}
+.mod-about-jkb dd.item h2{
+    font-size: 16px;
+    color:#666;
+    padding-left: 44px;
+}
+.mod-about-jkb dd.item h2.data{
+    background: transparent url("../../img/pages/data.jpg") no-repeat 0px 0px
+}
+.mod-about-jkb dd.item h2.monitor{
+    background: transparent url("../../img/pages/monitor.jpg") no-repeat 0px 0px;
+}
+.mod-about-jkb dd.item h2.service{
+    background: transparent url("../../img/pages/service.jpg") no-repeat 0px 0px;
+}

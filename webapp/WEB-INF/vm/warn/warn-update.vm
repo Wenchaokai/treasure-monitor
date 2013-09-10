@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>更新告警条件</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/warn.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+     <div class="doc" id="doc">
+          <div class="topbar" id="topbar">
+              <div class="layout">
+                    <div class="grid">
+                         <div class="mod-toolbar">
+                             <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+                         </div>
+                    </div>
+              </div>
+          </div>
+          <div class="header" id="header">
+              <div class="layout">
+                  <div class="grid">
+                      <div class="mod-masthead">
+                          <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="content" id="content">
+               <div class="layout layout-nav">
+                   <div class="grid">
+                       <div class="mod-nav" id="mod-nav">
+                            <div class="content">
+                                <ul>
+                                    <li class="">
+                                        <a href="/index.do" target="_self">概述</a>
+                                    </li>
+                                    <li>
+                                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                                    </li>
+                                    <li >
+                                        <a href="/user/infomanager.do" target="_self">设置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                       </div>
+                   </div>
+               </div>
+              <div class="layout">
+                  <div class="grid">
+                      <div class="grid-sub">
+                          <div class="mod-side-nav">
+                              <div class="content">
+                                  <ul>
+                                      <li>
+                                         <a href="/warn/warn-manager.do">
+                                             告警消息
+                                         </a>
+                                      </li>
+                                      <li>
+                                          <a href="/warn/alertmonitor-manage.do" class="active">告警条件管理</a>
+                                      </li>
+                                      <li class="hide">
+                                          <a href="./warn-type.html">告警方式</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="grid-main">
+                            <div class="wrap clearfix">
+                                <ul class="breadcrumb">
+                                    <li><a href="/warn/alertmonitor-manage.do">告警条件管理</a> <span class="divider">/</span></li>
+                                    <li class="active">新增告警条件</li>
+                                </ul>
+
+                                <div class="mod-warn-condition-add">
+                                    <div class="content">
+                                        <form class="form-horizontal" id="Alert-Form" name="Alert-Form" action="/warn/alertmonitor-update.do" method="post">
+                                            <input size="16" type="text" id="alertMonitorID" name="alertMonitorId" value="${alertMonitor.alertMonitorId}" style="width:140px" class="hide">
+											<div class="control-group">
+                                                <label class="control-label" for="">设置监控项目：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" id="alertMonitor" name="alertMonitor" style="width:250px;">
+                                                        <option value="-1">请选择监控项目</option>
+                                                        #foreach($monitor in $monitors)
+															#if ($monitor.monitorId == $alertMonitor.monitorId)
+																<option value="${monitor.monitorId}#${monitor.monitorName}#${monitor.monitorIndexList}#${monitor.monitorWarehouseNameList}#${monitor.monitorWarehouseCodeList}#${monitor.monitorSku}" selected>${monitor.monitorName}</option>
+															#else
+																<option value="${monitor.monitorId}#${monitor.monitorName}#${monitor.monitorIndexList}#${monitor.monitorWarehouseNameList}#${monitor.monitorWarehouseCodeList}#${monitor.monitorSku}" >${monitor.monitorName}</option>
+															#end
+														#end
+                                                    </select>
+                                                </div>
+                                            </div>
+											
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控指标：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" id="alertMonitorIndex" name="alertMonitorIndex" style="width:250px;">
+                                                        <option value="-1">请选择监控指标</option>
+														#foreach($indexId in $!currentMonitor.getMonitorIndexSet())
+															#if ($indexId==1)
+																#if($alertMonitor.alertMonitorIndex==$indexId)
+																	<option value="1" selected>分仓SKU各仓库订单量</option>
+																#else
+																	<option value="1">分仓SKU各仓库订单量</option>
+																#end
+															#elseif ($indexId==2)
+																#if($alertMonitor.alertMonitorIndex==$indexId)
+																	<option value="2" selected>分仓SKU各仓库库存量</option>
+																#else
+																	<option value="2">分仓SKU各仓库库存量</option>
+																#end
+															#elseif ($indexId==3)
+																#if($alertMonitor.alertMonitorIndex==$indexId)
+																	<option value="3" selected>SKU订单来源的区域分布</option>
+																#else 
+																	<option value="3">SKU订单来源的区域分布</option>
+																#end
+															#else
+																#if($alertMonitor.alertMonitorIndex==$indexId)
+																	<option value="4" selected>分仓SKU与未分仓SKU关联销售情况</option>
+																#else
+																	<option value="4">分仓SKU与未分仓SKU关联销售情况</option>
+																#end
+															#end
+														#end
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控仓库：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" id="alertMonitorWareHouse" name="alertMonitorWareHouse" style="width:250px;">
+                                                        #foreach($wareHouse in $wareHouses)
+															<option value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" #if(${wareHouse.checked}) selected #end>${wareHouse.wareHouseName}</option>
+														#end
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group #if($alertMonitor.alertMonitorIndex!=3) hide #end" id="distinctDiv" name="distinctDiv">
+                                                <label class="control-label help-block" for="">设置监控区域：</label>
+                                                <div class="controls">
+                                                    <div class="monitor-area-container">
+                                                        <table class="ui-table-base">
+                                                            <tbody>
+															#foreach($districtList in $districts)
+																<tr>
+																	#foreach($district in $districtList)
+																		<td>
+                                                                            <label class="checkbox">
+                                                                                <input type="checkbox" name="districtName" id="districtName" value="${district.districtId}#${district.districtName}" #if(${district.checked}==1) checked #end>
+                                                                                ${district.districtName}
+                                                                            </label>
+                                                                        </td>
+																	#end
+																</tr>
+															#end
+                                                            
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">设置监控SKU：</label>
+                                                <div class="controls">
+                                                    <select class="select-sku" id="alertMonitorSku" name="alertMonitorSku" style="width:250px;">
+                                                        #foreach($sku in $!currentMonitor.getMonitorSkus())
+                                                            <option value="${sku}" #if($sku == $alertMonitor.alertMonitorSku) selected #end>$sku</option>
+														#end
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label help-block " for="">请设置触发条件：</label>
+                                                <div class="controls">
+                                                    <span class="help-inline">连续：</span>
+                                                    <div class="input-append inline">
+                                                        <input size="16" id="alertMonitorDay" name="alertMonitorDay" type="text" value="${alertMonitor.alertMonitorDay}" style="width:50px">
+                                                    </div>
+                                                    日
+                                                    <select style="width:50px;" id="alertMonitorCompare" name="alertMonitorCompare">
+                                                        <option value="1" #if(${alertMonitor.alertMonitorCompare}==1) selected #end>></option>
+                                                        <option value="2" #if(${alertMonitor.alertMonitorCompare}==2) selected #end>＜</option>
+                                                        <option value="3" #if(${alertMonitor.alertMonitorCompare}==3) selected #end>=</option>
+                                                        <option value="4" #if(${alertMonitor.alertMonitorCompare}==4) selected #end>≥</option>
+                                                        <option value="5" #if(${alertMonitor.alertMonitorCompare}==5) selected #end>≤</option>
+                                                    </select>
+                                                    <div class="input-append inline">
+                                                        <input size="16" type="text" id="alertMonitorNum" name="alertMonitorNum" value="${alertMonitor.alertMonitorNum}" style="width:100px" >
+                                                    </div>
+                                                    <select style="width:50px;" id="alertMonitorUnit" name="alertMonitorUnit">
+                                                        <option value="3" #if(${alertMonitor.alertMonitorUnit}==3) selected #end>件</option>
+                                                        <option value="2" #if(${alertMonitor.alertMonitorUnit}==2) selected #end>单</option>
+                                                        <option value="1" #if(${alertMonitor.alertMonitorUnit}==1) selected #end>%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">设置触发的告警消息：</span>
+                                                <div class="controls2">
+                                                    <textarea rows="3" id="alertMonitorMsg" name="alertMonitorMsg" class="span10" >${alertMonitor.alertMonitorMsg}
+                                                    </textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">告警消息中的变量设置如下：</span>
+                                                <div class="controls2">
+                                                     <table class="ui-table ui-table-var">
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    SKU名称：[sku-Name]
+                                                                </td>
+                                                                <td>
+                                                                    仓库名称：[ofc-Name]
+                                                                </td>
+                                                                <td>
+                                                                    天/月数：[date-Num]
+                                                                </td>
+                                                                <td>
+                                                                    日期单位：[date-Unit]
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    比较单位：[compare-Unit]
+                                                                </td>
+                                                                <td>
+                                                                    阀值：[warning-Value]
+                                                                </td>
+                                                                <td colspan="2">
+                                                                    阀值单位：[warning-Value-Unit]
+                                                                </td>
+
+                                                            </tr>
+                                                         </tbody>
+                                                     </table>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <span class="help-block help-block-set-condition">请设置告警方式：</span>
+                                                <div class="controls2">
+                                                    <label class="checkbox inline">
+                                                        <input type="checkbox" id="alertMonitorSmsCheckbox" name="alertMonitorSmsCheckbox" value="option1" #if(${alertMonitor.alertMonitorEnableSms}==1) checked #end>短信发送到
+                                                    </label>
+													#foreach($sms in $!alertMonitor.getSmsInfo())
+														<div class="input-append inline">
+                                                        <input size="16" type="text" id="alertMonitorSms" name="alertMonitorSms" value="$sms" style="width:140px" placeholder="请输入11位手机号码" #if(${alertMonitor.alertMonitorEnableSms}==0)disabled#end>
+                                                    </div>
+													#end
+                                                    
+                                                </div>
+                                                <div class="controls2" style="margin-top: 8px;">
+                                                    <label class="checkbox inline">
+                                                        <input type="checkbox" id="alertMonitorEmailCheckbox" name="alertMonitorEmailCheckbox" value="option1" #if(${alertMonitor.alertMonitorEnableEmail}==1) checked #end>邮件发送到
+                                                    </label>
+													#foreach($email in $!alertMonitor.getEmailInfo())
+													<div class="input-append inline">
+                                                        <input size="16" type="text" id="alertMonitorEmail" name="alertMonitorEmail" value="$email" style="width:140px" placeholder="请输入邮件地址" #if(${alertMonitor.alertMonitorEnableEmail}==0)disabled#end>
+                                                    </div>
+													#end
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="">开启状态：</label>
+                                                <div class="controls">
+                                                    <label class="checkbox inline">
+                                                        <input type="radio" id="alertMonitorStatus" name="alertMonitorStatus" value="1" #if(${alertMonitor.alertMonitorStatus}==1)checked#end>&nbsp;&nbsp;开启
+                                                    </label>
+                                                    <label class="checkbox inline">
+                                                        <input type="radio" id="alertMonitorStatus" name="alertMonitorStatus" value="0" #if(${alertMonitor.alertMonitorStatus}==0)checked#end>&nbsp;&nbsp;不开启
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    <button type="submit" class="btn btn-primary">新增</button>
+                                                    <a class="btn btn-danger btn-large" href="javascript:history.go(-1);">取消</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="footer clearfix" id="footer">
+                <div class="layout">
+                    <div class="grid">
+                        <div class="mod-footer">
+                            <div class="content">
+                                <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+     </div>
+    <script src="/static/plugins/charts/ficharts/FiCharts.js"></script>
+    <script src="/static/js/pages/alert.js"></script>
+</body>
+</html>

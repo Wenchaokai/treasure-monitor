@@ -1,0 +1,16 @@
+#footer{
+ height: 70px;
+ border-top:1px solid #ccc;
+ background-color: #eee;
+}
+.mod-footer{
+
+}
+.mod-footer p{
+    line-height: 30px;
+    padding-top: 4px;
+    color:#000;
+    padding-left: 30px;
+    font-weight: normal;
+    font-size: 12px;
+}

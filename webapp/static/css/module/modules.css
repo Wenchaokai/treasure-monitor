@@ -1,0 +1,44 @@
+.topbar{
+    width: 100%;
+    height: 26px;
+    background: #f5f5f5;
+    background: -moz-linear-gradient(-90deg, #fcfcfc 0%, #f5f5f5 100%);
+    background: -webkit-linear-gradient(-90deg, #fcfcfc 0%, #f5f5f5 100%);
+    background: -o-linear-gradient(-90deg, #fcfcfc 0%, #f5f5f5 100%);
+    background: -ms-linear-gradient(-90deg, #fcfcfc 0%, #f5f5f5 100%);
+    background: linear-gradient(-90deg, #fcfcfc 0%, #f5f5f5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f5f5f5');
+    border-bottom: 1px solid #dcdcdc;
+    _overflow: hidden;
+}
+.mod-toolbar{
+    height: 26px;
+    line-height:26px;
+}
+.mod-toolbar p{
+    float: right;
+    padding-right: 40px;
+    text-align: right;
+}
+.mod-toolbar a.login{
+    margin-left: 10px;
+}
+.mod-masthead{
+    height: 80px;
+    overflow:hidden;
+}#footer{
+ height: 70px;
+ border-top:1px solid #ccc;
+ background-color: #eee;
+}
+.mod-footer{
+
+}
+.mod-footer p{
+    line-height: 30px;
+    padding-top: 4px;
+    color:#000;
+    padding-left: 30px;
+    font-weight: normal;
+    font-size: 12px;
+}
