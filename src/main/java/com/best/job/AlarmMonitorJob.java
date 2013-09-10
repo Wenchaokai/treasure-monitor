@@ -12,7 +12,7 @@ import org.quartz.JobExecutionException;
 public class AlarmMonitorJob {
 
 	public void execute() throws JobExecutionException {
-		System.out.println("AlarmMonitorJob");
+
 	}
 
 }
