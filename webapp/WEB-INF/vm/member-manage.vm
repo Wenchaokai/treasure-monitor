@@ -132,7 +132,7 @@
 											#end
 										</td>
 										<td>
-											<a href="/user/infomanager.do?userId=${member.userId}&userName=${member.userName}">修改</a>
+											<a href="/user/member-update-view.do?userId=${member.userId}">修改</a>
 											<a href="javascript:if(confirm('确认删除吗?'))window.location='/user/delete.do?userId=${member.userId}'" class="btn-del">删除</a>
 										</td>
                                 </tr>
@@ -156,10 +156,10 @@
                 <div class="mod-pages">
                     <div class="content">
 
-                        <div class="pagination pagination-large pagination-right">
+                        <div class="pagination pagination-right">
                             <ul>
                                 
-                                <li><a href="/user/member-manage.do?currentPage=${prePage}&searchName=${searchName}&searchCount=${searchCount}" target="_self">«</a></li>
+                                <li><a href="/user/member-manage.do?currentPage=${prePage}&searchName=${searchName}&searchCount=${searchCount}" target="_self">上一页</a></li>
 								#set($nums=[${start} .. ${end}])
 								#foreach($i in $nums)
 									#if ($i==${currentPage})
@@ -168,7 +168,7 @@
 										<li><a href="/user/member-manage.do?currentPage=$i&searchName=${searchName}&searchCount=${searchCount}">$i</a></li>
 									#end
 								#end
-								<li><a href="/user/member-manage.do?currentPage=${nextPage}&searchName=${searchName}&searchCount=${searchCount}">»</a></li>
+								<li><a href="/user/member-manage.do?currentPage=${nextPage}&searchName=${searchName}&searchCount=${searchCount}">下一页</a></li>
                                 
                                
                             </ul>

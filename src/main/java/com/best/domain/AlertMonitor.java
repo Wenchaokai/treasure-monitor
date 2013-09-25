@@ -22,7 +22,7 @@ public class AlertMonitor implements Serializable {
 	private Integer alertMonitorIndex;
 	private String monitorName;
 	private Integer alertMonitorDay;
-	private Integer alertMonitorNum;
+	private Double alertMonitorNum;
 	private Integer alertMonitorUnit;
 	private String alertMonitorMsg;
 	private String alertMonitorSms;
@@ -36,6 +36,9 @@ public class AlertMonitor implements Serializable {
 	private Integer count;
 	private Integer alertMonitorEnableSms;
 	private Integer alertMonitorEnableEmail;
+	private Integer alertMonitorCount;
+	private String userCount;
+	private Long parentId;
 
 	public Long getAlertMonitorId() {
 		return alertMonitorId;
@@ -61,11 +64,11 @@ public class AlertMonitor implements Serializable {
 		this.alertMonitorDay = alertMonitorDay;
 	}
 
-	public Integer getAlertMonitorNum() {
+	public Double getAlertMonitorNum() {
 		return alertMonitorNum;
 	}
 
-	public void setAlertMonitorNum(Integer alertMonitorNum) {
+	public void setAlertMonitorNum(Double alertMonitorNum) {
 		this.alertMonitorNum = alertMonitorNum;
 	}
 
@@ -189,6 +192,22 @@ public class AlertMonitor implements Serializable {
 		this.alertMonitorEnableEmail = alertMonitorEnableEmail;
 	}
 
+	public Integer getAlertMonitorCount() {
+		return alertMonitorCount;
+	}
+
+	public void setAlertMonitorCount(Integer alertMonitorCount) {
+		this.alertMonitorCount = alertMonitorCount;
+	}
+
+	public String getUserCount() {
+		return userCount;
+	}
+
+	public void setUserCount(String userCount) {
+		this.userCount = userCount;
+	}
+
 	public List<String> getSmsInfo() {
 		List<String> res = new ArrayList<String>();
 		if (StringUtils.isNotBlank(this.alertMonitorSms)) {
@@ -233,8 +252,14 @@ public class AlertMonitor implements Serializable {
 		String msg = alertMonitorMsg;
 		if (null == msg)
 			return "";
-		msg = msg.replace("[sku-Name]", this.alertMonitorSku);
-		msg = msg.replace("[ofc-Name]", this.alertMonitorWareHouseName);
+		if ("-1".equals(alertMonitorSku))
+			msg = msg.replace("[sku-Name]", "所有SKU");
+		else
+			msg = msg.replace("[sku-Name]", this.alertMonitorSku);
+		if ("-1".equals(alertMonitorWareHouseName))
+			msg = msg.replace("[ofc-Name]", "所有仓库");
+		else
+			msg = msg.replace("[ofc-Name]", this.alertMonitorWareHouseName);
 		msg = msg.replace("[date-Num]", this.alertMonitorDay + "");
 		msg = msg.replace("[date-Unit]", "日");
 		String compareUnit = ">";
@@ -255,6 +280,29 @@ public class AlertMonitor implements Serializable {
 			valueUnit = "单";
 		msg = msg.replace("[warning-Value-Unit]", valueUnit);
 		return msg;
+	}
+
+	public List<String> getDistributes() {
+		if (StringUtils.isBlank(alertMonitorDistrict))
+			return new ArrayList<String>();
+		String[] provinces = alertMonitorDistrict.split(",");
+		List<String> res = new ArrayList<String>();
+		for (String province : provinces) {
+			String[] city = province.split("#");
+			if (city.length != 2)
+				continue;
+			res.add(city[1]);
+		}
+		return res;
+
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public static void main(String[] args) {

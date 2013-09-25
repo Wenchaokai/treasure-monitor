@@ -8,18 +8,35 @@
 		<result property="id" column="ID" />
 		<result property="wareHouseName" column="WAREHOUSENAME" />
 		<result property="wareHouseCode" column="WAREHOUSECODE"/>
+		<result property="wmsOrgCode" column="WMSORGCODE"/>
+		<result property="wmsWareHouseCode" column="WMSWAREHOUSECODE" />
 	</resultMap>
 	
 	<select id="GET_ALL_WAREHOUSE" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
             SELECT
-            	ID,WAREHOUSENAME,WAREHOUSECODE
+            	ID,WAREHOUSENAME,WAREHOUSECODE,WMSWAREHOUSECODE,WMSORGCODE
             FROM 
             	ECBOSS_WAREHOUSE
             ORDER BY 
             	id
             LIMIT #start#,#pageSize#
         ]]>
+	</select>
+	
+	<select id="GET_WAREHOUSE_LIST" parameterClass="java.util.List" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	ID,WAREHOUSENAME,WAREHOUSECODE,WMSWAREHOUSECODE,WMSORGCODE
+            FROM 
+            	ECBOSS_WAREHOUSE
+            WHERE 
+            	WAREHOUSECODE IN
+        ]]>
+            <iterate open="(" close=")" conjunction=",">  
+            	#[]#  
+        	</iterate> 
+        
 	</select>
 
 </sqlMap>

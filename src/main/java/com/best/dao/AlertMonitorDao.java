@@ -28,11 +28,10 @@ public class AlertMonitorDao extends BaseDao {
 	private static final String space = "alertMonitorSpace.";
 
 	@SuppressWarnings("unchecked")
-	public List<AlertMonitor> getAllAlertMonitors() {
+	public List<AlertMonitor> getAllAlertMonitors(String userCount) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		// return (List<AlertMonitor>) this.list(space +
-		// "GET_ALL_ALERTMONITOR_BY_PAGESIZE", map, sqlMapClient);
+		map.put("userCount", userCount);
 
 		List<AlertMonitor> res = new ArrayList<AlertMonitor>();
 		int pageSize = 500;
@@ -55,8 +54,9 @@ public class AlertMonitorDao extends BaseDao {
 
 	}
 
-	public Integer getAllAlertMonitorTotalSize() {
+	public Integer getAllAlertMonitorTotalSize(String userCount) {
 		Map<String, String> map = new HashMap<String, String>();
+		map.put("userCount", userCount);
 		Integer res = (Integer) this.object(space + "GET_ALL_ALERTMONITOR_BY_TOTALSIZE_MONITORID", map, sqlMapClient);
 		if (res % pageSize == 0)
 			return res / pageSize;
@@ -83,8 +83,8 @@ public class AlertMonitorDao extends BaseDao {
 		this.delete(space + "DELETE_ALERTMONITOR", alertMonitorId, sqlMapClient);
 	}
 
-	public void insertAlertMonitor(AlertMonitor alertMonitor) {
-		this.insert(space + "INSERT_ALERTMONITOR", alertMonitor, sqlMapClient);
+	public Long insertAlertMonitor(AlertMonitor alertMonitor) {
+		return (Long) this.insert(space + "INSERT_ALERTMONITOR", alertMonitor, sqlMapClient);
 	}
 
 	public AlertMonitor getAlertMonitor(long alertMonitorId) {
@@ -95,7 +95,23 @@ public class AlertMonitorDao extends BaseDao {
 		this.update(space + "UPDATE_ALERTMONITOR", alertMonitor, sqlMapClient);
 	}
 
+	public void updateAlertMonitorCount(AlertMonitor alertMonitor) {
+		this.update(space + "UPDATE_ALERTMONITOR_COUNT", alertMonitor, sqlMapClient);
+	}
+
 	public void deleteMonitor(long monitorId) {
 		this.delete(space + "DELETE_MONITOR", monitorId, sqlMapClient);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AlertMonitor> getStartedAlertMonitorProject(int start, int size) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("start", start);
+		map.put("size", size);
+		return (List<AlertMonitor>) this.list(space + "GET_ENABLED_ALERTMONITOR", map, sqlMapClient);
+	}
+
+	public void deleteAlertMonitorByParent(long parentId) {
+		this.delete(space + "DELETE_ALERTMONITOR_BY_PARENT", parentId, sqlMapClient);
 	}
 }

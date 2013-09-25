@@ -28,9 +28,10 @@ public class MonitorDao extends BaseDao {
 	private static final String space = "monitorSpace.";
 
 	@SuppressWarnings("unchecked")
-	public List<Monitor> findMonitorsByPageSize(int end) {
+	public List<Monitor> findMonitorsByPageSize(int end, String userCount) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
+		map.put("userCount", userCount);
 		String selectString = "GET_MONITOR_BY_PAGESIZE";
 
 		// map.put("pageSize", end);
@@ -57,9 +58,9 @@ public class MonitorDao extends BaseDao {
 
 	}
 
-	public Integer findTotalSize() {
+	public Integer findTotalSize(String userCount) {
 		Map<String, Object> map = new HashMap<String, Object>();
-
+		map.put("userCount", userCount);
 		String selectString = "GET_MONITOR_BY_TOTALSIZE";
 
 		map.put("pageSize", pageSize);
@@ -88,11 +89,12 @@ public class MonitorDao extends BaseDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Monitor> getAllMonitor() {
+	public List<Monitor> getAllMonitor(String userCount) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// return (List<Monitor>) this.list(space + "SELECT_ALL_MONITOR", map,
 		// sqlMapClient);
 
+		map.put("userCount", userCount);
 		List<Monitor> res = new ArrayList<Monitor>();
 		int page = 500;
 		int start = 0;

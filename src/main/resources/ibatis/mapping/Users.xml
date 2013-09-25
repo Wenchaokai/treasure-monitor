@@ -9,7 +9,28 @@
 		<result property="userName" column="user_name" />
 		<result property="userCount" column="user_count" />
 		<result property="userRole" column="user_role"/>
+		<result property="userCustomers" column="user_customers"/>
 	</resultMap>
+	
+	<resultMap class="user" id="properties">
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="userCount" column="user_count" />
+		<result property="userRole" column="user_role"/>
+		<result property="userPassword" column="user_password"/>
+		<result property="userCustomers" column="user_customers"/>
+	</resultMap>
+	
+	<select id="GET_USER_BY_ID" parameterClass="java.lang.Long" resultMap="properties">
+		<![CDATA[
+            SELECT 
+            	*
+            FROM 
+            	users 
+            WHERE 
+            	user_id=#userId#
+        ]]>
+	</select>
 	
 	<update id="UPDATE_USER_PASSWORD" parameterClass="java.util.Map">
 		<![CDATA[
@@ -36,7 +57,7 @@
 	<select id="CHECK_USER" parameterClass="user" resultMap="allProperties">
 		<![CDATA[
             SELECT 
-            	user_id, user_name, user_role,user_count 
+            	user_id, user_name, user_role,user_count,user_customers
             FROM 
             	users 
             WHERE 
@@ -47,7 +68,7 @@
 	<select id="GET_USER_BY_PAGESIZE" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
             SELECT
-            	user_id,user_count,user_name,user_role
+            	user_id,user_count,user_name,user_role,user_customers
             FROM 
             	users
             ORDER BY 
@@ -60,7 +81,7 @@
 	<select id="GET_USER_BY_NAME" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
             SELECT
-            	user_id,user_count,user_name,user_role
+            	user_id,user_count,user_name,user_role,user_customers
             FROM 
             	users
             WHERE
@@ -74,7 +95,7 @@
 	<select id="GET_USER_BY_COUNT" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
             SELECT
-            	user_id,user_count,user_name,user_role
+            	user_id,user_count,user_name,user_role,user_customers
             FROM 
             	users
             WHERE
@@ -88,7 +109,7 @@
 	<select id="GET_USER_BY_ALL" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
             SELECT
-            	user_id,user_count,user_name,user_role
+            	user_id,user_count,user_name,user_role,user_customers
             FROM 
             	users
             WHERE
@@ -140,12 +161,25 @@
             	user_count LIKE #searchCount# AND user_name LIKE #searchName#
         ]]>
 	</select>
+	<update id="UPDATE_USER_INFO" parameterClass="user">
+		<![CDATA[
+			UPDATE
+				users
+			SET
+				user_name=#userName#,
+				user_password=#userPassword#,
+				user_customers=#userCustomers#,
+				user_role=#userRole#
+			WHERE
+				user_count=#userCount#
+		]]>
+	</update>
 	<insert id="INSERT_USER" parameterClass="user">
 		<![CDATA[
             INSERT INTO 
-            	users (user_count,user_name, user_password,user_role) 
+            	users (user_count,user_name, user_password,user_role,user_customers) 
             VALUES 
-            	(#userCount#,#userName#, #userPassword#,#userRole#)
+            	(#userCount#,#userName#, #userPassword#,#userRole#,#userCustomers#)
         ]]>
 	</insert>
 	<delete id="DELETE_USER" parameterClass="java.lang.Long">

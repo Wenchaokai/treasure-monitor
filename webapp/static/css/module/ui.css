@@ -29,6 +29,7 @@
     border:1px solid #dddddd;
     text-align: center;
     line-height: 33px;
+    font-size: 12px;
 }
 .ui-hide{
     display: none;

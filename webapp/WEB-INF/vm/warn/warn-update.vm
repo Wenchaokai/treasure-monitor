@@ -296,7 +296,7 @@
 
                                             <div class="control-group">
                                                 <div class="controls">
-                                                    <button type="submit" class="btn btn-primary">新增</button>
+                                                    <button type="submit" class="btn btn-primary">确定</button>
                                                     <a class="btn btn-danger btn-large" href="javascript:history.go(-1);">取消</a>
                                                 </div>
                                             </div>

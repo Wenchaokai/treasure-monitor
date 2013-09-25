@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="statisticSpace">
+
+	<typeAlias alias="idoStatistic" type="com.best.domain.IdoStatistic" />
+
+	<resultMap class="idoStatistic" id="allProperties">
+		<result property="numCount" column="COUNT" />
+		<result property="dateTime" column="accepted_day" />
+		<result property="wareHouseCode" column="WH_CODE"/>
+	</resultMap>
+	
+	<resultMap class="idoStatistic" id="provinceStatistic">
+		<result property="numCount" column="COUNT" />
+		<result property="dateTime" column="accepted_day" />
+		<result property="province" column="PROVINCE"/>
+	</resultMap>
+	
+	<resultMap class="idoStatistic" id="percentStatistic">
+		<result property="numCount" column="COUNT" />
+		<result property="dateTime" column="accepted_day" />
+		<result property="skuCode" column="SKUCODE"/>
+	</resultMap>
+
+	<select id="SELECT_SKU_WAREHOUSE_IDO" parameterClass="java.util.Map" resultMap="allProperties">
+	<![CDATA[
+			SELECT 
+				COUNT(a.ID) AS COUNT,date_format(a.WAREHOUSE_ACCEPTED_TIME,"%Y%m%d") as accepted_day, a.WH_CODE  as WH_CODE
+			FROM 
+				ECBOSS_LDO a JOIN ECBOSS_LDO_ITEM b 
+			ON 
+				a.ID=b.LDO_ID 
+			WHERE 
+		]]>
+				<isNotNull property="wareHouseCodeList">  
+			        <iterate property="wareHouseCodeList" open="("
+			          close=")" conjunction="or">
+			          WH_CODE=#wareHouseCodeList[]#
+			        </iterate>
+			    AND
+		        </isNotNull>
+		        <isNotNull  property="skuCode">
+		        	SKU_CODE=#skuCode#
+		        AND
+		        </isNotNull>
+		<![CDATA[
+				CUSTOMER_CODE=#customerCode# 
+			AND 
+				unix_timestamp(WAREHOUSE_ACCEPTED_TIME)>=unix_timestamp(#startTime#)
+		
+			AND 
+				unix_timestamp(WAREHOUSE_ACCEPTED_TIME)<=(unix_timestamp(#endTime#)+24*60*60)  
+			GROUP BY 
+				a.WH_CODE,accepted_day
+		]]>
+	</select>
+	
+	<select id="SELECT_SKU_PROVINCE_IDO" parameterClass="java.util.Map" resultMap="provinceStatistic">
+		<![CDATA[
+			SELECT 
+				COUNT(a.ID) AS COUNT,date_format(a.CREATE_TIME,"%Y%m%d") as accepted_day, a.CONSIGNEE_PROVINCE as PROVINCE 
+			FROM 
+				ECBOSS_LDO a JOIN ECBOSS_LDO_ITEM b 
+			ON 
+				a.ID=b.LDO_ID 
+			WHERE
+		]]>
+		<isNotNull property="skuCode">  
+                SKU_CODE=#skuCode#
+        AND
+        </isNotNull> 
+		<![CDATA[
+				CUSTOMER_CODE=#customerCode# 
+			AND 
+				unix_timestamp(a.CREATE_TIME)>=unix_timestamp(#startTime#)
+			AND 
+				unix_timestamp(a.CREATE_TIME)<=(unix_timestamp(#endTime#)+24*60*60) 
+			GROUP BY 
+				PROVINCE,accepted_day
+		]]>
+	</select>
+	
+	
+	<select id="SELECT_SKU_PERCENT_IDO" parameterClass="java.util.Map" resultMap="percentStatistic">
+		<![CDATA[
+		
+			SELECT 
+				count(b.SKU_CODE) AS COUNT,b.sku_code AS SKUCODE,date_format(a.CREATE_TIME,"%Y%m%d") AS accepted_day
+			FROM 
+				ECBOSS_LDO a JOIN ECBOSS_LDO_ITEM b 
+			ON 
+				a.ID=b.LDO_ID
+			where a.ID in (
+						SELECT 
+							 a.ID
+						FROM 
+							ECBOSS_LDO a JOIN ECBOSS_LDO_ITEM b 
+						ON 
+							a.ID=b.LDO_ID 
+						WHERE
+						]]>
+						<isNotNull property="skuCode">  
+				                SKU_CODE=#skuCode#
+				         AND
+				        </isNotNull> 
+						<![CDATA[
+							CUSTOMER_CODE=#customerCode# 
+						AND 
+							unix_timestamp(a.CREATE_TIME)>=unix_timestamp(#startTime#)
+						AND 
+							unix_timestamp(a.CREATE_TIME)<=(unix_timestamp(#endTime#)+24*60*60) 
+			)
+			GROUP BY 
+				SKUCODE,accepted_day
+		]]>
+	</select>
+	
+</sqlMap>

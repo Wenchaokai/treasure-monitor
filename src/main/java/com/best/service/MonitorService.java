@@ -1,5 +1,6 @@
 package com.best.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.best.dao.MonitorDao;
 import com.best.domain.Monitor;
+import com.best.domain.Treasure;
+import com.best.utils.DateUtil;
 
 /**
  * ClassName:MonitorService Description:
@@ -25,16 +28,22 @@ public class MonitorService extends BaseService {
 	@Autowired
 	private MonitorDao monitorDao;
 
-	private static final String MONITOR_RESULTS_KEY = "MONITOR_RESULTS_KEY";
-	private static final String MONITOR_ALL_RESULTS_KEY = "MONITOR_ALL_RESULTS_KEY";
-	private static final String MONITOR_TOTALSIZE_RESULTS_KEY = "MONITOR_TOTALSIZE_RESULTS_KEY";
+	@Autowired
+	private AlertMonitorService alertMonitorService;
+
+	@Autowired
+	private TreasureService treasureService;
+
+	private static final String MONITOR_RESULTS_KEY = "MONITOR_RESULTS_KEY_";
+	private static final String MONITOR_ALL_RESULTS_KEY = "MONITOR_ALL_RESULTS_KEY_";
+	private static final String MONITOR_TOTALSIZE_RESULTS_KEY = "MONITOR_TOTALSIZE_RESULTS_KEY_";
 	private static final String MONITOR_PREFIX = "MONITOR_";
 
-	public List<Monitor> getMonitors(Integer page) {
+	public List<Monitor> getMonitors(Integer page, String userCount) {
 		List<Monitor> res = null;
 		// 从缓存读取数据
 		try {
-			res = memcachedClient.get(MONITOR_RESULTS_KEY);
+			res = memcachedClient.get(MONITOR_RESULTS_KEY + userCount);
 		} catch (TimeoutException e1) {
 		} catch (InterruptedException e1) {
 		} catch (MemcachedException e1) {
@@ -44,10 +53,10 @@ public class MonitorService extends BaseService {
 		if (null != res && res.size() > start) {
 			return res.subList(start, res.size() > end ? end : res.size());
 		}
-		res = monitorDao.findMonitorsByPageSize(end);
+		res = monitorDao.findMonitorsByPageSize(end, userCount);
 
 		try {
-			memcachedClient.add(MONITOR_RESULTS_KEY, 0, res);
+			memcachedClient.add(MONITOR_RESULTS_KEY + userCount, 0, res);
 		} catch (TimeoutException e) {
 		} catch (InterruptedException e) {
 		} catch (MemcachedException e) {
@@ -60,19 +69,19 @@ public class MonitorService extends BaseService {
 
 	}
 
-	public int getMonitorsTotalSize() {
+	public int getMonitorsTotalSize(String userCount) {
 		Integer res = null;
 		try {
-			res = memcachedClient.get(MONITOR_TOTALSIZE_RESULTS_KEY);
+			res = memcachedClient.get(MONITOR_TOTALSIZE_RESULTS_KEY + userCount);
 		} catch (TimeoutException e) {
 		} catch (InterruptedException e) {
 		} catch (MemcachedException e) {
 		}
 		if (null != res)
 			return res;
-		res = monitorDao.findTotalSize();
+		res = monitorDao.findTotalSize(userCount);
 		try {
-			memcachedClient.add(MONITOR_TOTALSIZE_RESULTS_KEY, 0, res);
+			memcachedClient.add(MONITOR_TOTALSIZE_RESULTS_KEY + userCount, 0, res);
 		} catch (TimeoutException e) {
 		} catch (InterruptedException e) {
 		} catch (MemcachedException e) {
@@ -80,85 +89,97 @@ public class MonitorService extends BaseService {
 		return res;
 	}
 
-	public void deleteMonitor(Long monitorId) {
+	public void deleteMonitor(Long monitorId, String userCount) {
+		// 删除监控项目
 		monitorDao.delteMonitor(monitorId);
-		// 清除缓存
+
+		// 删除告警项目
+		alertMonitorService.deleteMonitor(monitorId, userCount);
+
 		try {
-			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+			// 删除每日统计
+			deleteTreasure();
+			// 清除缓存
+			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY + userCount);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	public Monitor monitorView(long monitorId) {
 		Monitor res = null;
 		try {
 			res = memcachedClient.get(MONITOR_PREFIX + monitorId);
-		} catch (TimeoutException e1) {
-		} catch (InterruptedException e1) {
-		} catch (MemcachedException e1) {
+		} catch (Exception e1) {
 		}
 		if (null != res)
 			return res;
 		res = monitorDao.getMonitor(monitorId);
 		try {
 			memcachedClient.add(MONITOR_PREFIX + monitorId, 0, res);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+		} catch (Exception e) {
 		}
 		return res;
 	}
 
-	public Monitor updateMonitor(Monitor monitor) {
+	public Monitor updateMonitor(Monitor monitor, String userCount) {
 		monitorDao.updateMonitor(monitor);
 		try {
 			memcachedClient.delete(MONITOR_PREFIX + monitor.getMonitorId());
 			memcachedClient.add(MONITOR_PREFIX + monitor.getMonitorId(), 0, monitor);
-			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY + userCount);
+		} catch (Exception e) {
 		}
 		return monitor;
 	}
 
-	public Monitor insertMonitor(Monitor monitor) {
+	public Monitor insertMonitor(Monitor monitor, String userCount) {
 		monitor = monitorDao.addMonitor(monitor);
 		try {
+			addTreasure();
 			memcachedClient.add(MONITOR_PREFIX + monitor.getMonitorId(), 0, monitor);
-			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_RESULTS_KEY);
-			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+			memcachedClient.delete(MONITOR_TOTALSIZE_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_RESULTS_KEY + userCount);
+			memcachedClient.delete(MONITOR_ALL_RESULTS_KEY + userCount);
+		} catch (Exception e) {
 		}
 		return monitor;
 	}
 
-	public List<Monitor> getAllMonitor() {
+	public List<Monitor> getAllMonitor(String userCount) {
 		List<Monitor> res = null;
 		try {
-			res = memcachedClient.get(MONITOR_ALL_RESULTS_KEY);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+			res = memcachedClient.get(MONITOR_ALL_RESULTS_KEY + userCount);
+		} catch (Exception e) {
 		}
 		if (null != res)
 			return res;
-		res = monitorDao.getAllMonitor();
+		res = monitorDao.getAllMonitor(userCount);
 		try {
-			memcachedClient.set(MONITOR_ALL_RESULTS_KEY, 0, res);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+			memcachedClient.set(MONITOR_ALL_RESULTS_KEY + userCount, 0, res);
+		} catch (Exception e) {
 		}
 		return res;
+	}
+
+	private void deleteTreasure() throws ParseException {
+		Treasure treasure = new Treasure();
+		treasure.setDateTime(DateUtil.getCurrentDateString());
+		treasure.setAlarmNums(0);
+		treasure.setMonitorNums(-1);
+		treasureService.updateTreasure(treasure);
+	}
+
+	private void addTreasure() throws ParseException {
+		Treasure treasure = new Treasure();
+		treasure.setDateTime(DateUtil.getCurrentDateString());
+		treasure.setAlarmNums(0);
+		treasure.setMonitorNums(1);
+		treasureService.updateTreasure(treasure);
 	}
 }

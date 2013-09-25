@@ -1,4 +1,7 @@
 .layout-banner{
+   background: #f4f4f4 url(../../img/pages/bg.jpg) repeat-x 0px 0px;
+}
+.layout-banner .grid{
     background: transparent url(../../img/pages/login.jpg) no-repeat center 0px;
 }
 
@@ -25,6 +28,8 @@
 }
 .mod-login .login-box form legend{
     color:#fff;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 .ui-form-content{
     padding-left: 4px;
@@ -36,42 +41,47 @@
 .mod-login .login-box form .label{
     line-height: 15px;
     padding: 4px 8px;
+    font-size: 12px;
+}
+.mod-login .login-box form input,
+.mod-login .login-box form label{
+    font-size: 12px;
 }
 .mod-login .login-box form .label-error{
      width: 200px;
 }
-.mod-about-jkb{
+.mod-about-bs{
 
 }
-.mod-about-jkb .content{
+.mod-about-bs .content{
     height: 250px;
     padding-top: 24px;
 }
-.mod-about-jkb dd.item{
+.mod-about-bs dd.item{
     float:left;
     width: 310px;
     margin-left: 0px;
     padding-left: 20px;
 }
-.mod-about-jkb dd.item ul{
+.mod-about-bs dd.item ul{
     margin-left: 0px;
 }
-.mod-about-jkb dd.item li{
+.mod-about-bs dd.item li{
     line-height: 26px;
     padding-left: 20px;
     list-style: none;
 }
-.mod-about-jkb dd.item h2{
+.mod-about-bs dd.item h2{
     font-size: 16px;
     color:#666;
     padding-left: 44px;
 }
-.mod-about-jkb dd.item h2.data{
+.mod-about-bs dd.item h2.data{
     background: transparent url("../../img/pages/data.jpg") no-repeat 0px 0px
 }
-.mod-about-jkb dd.item h2.monitor{
+.mod-about-bs dd.item h2.monitor{
     background: transparent url("../../img/pages/monitor.jpg") no-repeat 0px 0px;
 }
-.mod-about-jkb dd.item h2.service{
+.mod-about-bs dd.item h2.service{
     background: transparent url("../../img/pages/service.jpg") no-repeat 0px 0px;
 }

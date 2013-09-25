@@ -1,6 +1,10 @@
 package com.best.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * ClassName:User Description:
@@ -18,6 +22,7 @@ public class User implements Serializable {
 	private String userName;
 	private Integer userRole;
 	private String userPassword;
+	private String userCustomers;
 
 	public Long getUserId() {
 		return userId;
@@ -57,6 +62,25 @@ public class User implements Serializable {
 
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
+	}
+
+	public String getUserCustomers() {
+		return userCustomers;
+	}
+
+	public void setUserCustomers(String userCustomers) {
+		this.userCustomers = userCustomers;
+	}
+
+	public Set<String> getCustomerCodes() {
+		Set<String> customerCodes = new HashSet<String>();
+		if (StringUtils.isNotBlank(userCustomers)) {
+			String[] parts = userCustomers.split(",");
+			for (String part : parts) {
+				customerCodes.add(part);
+			}
+		}
+		return customerCodes;
 	}
 
 }

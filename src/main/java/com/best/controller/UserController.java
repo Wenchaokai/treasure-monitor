@@ -3,6 +3,7 @@ package com.best.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.best.Constants;
+import com.best.domain.Customer;
 import com.best.domain.User;
+import com.best.service.CustomerService;
 import com.best.service.UserService;
 import com.best.utils.CommonUtils;
 
@@ -34,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private CustomerService customerService;
 
 	@RequestMapping(value = "/user/checkUser.do")
 	public String checkUser(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException {
@@ -93,6 +99,41 @@ public class UserController {
 		return "member-set";
 	}
 
+	@RequestMapping(value = "/user/member-update-view.do")
+	public String memberUpdateView(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException {
+
+		if (!CommonUtils.checkSessionTimeOut(req))
+			return "redirect:/login.do";
+
+		String userId = req.getParameter("userId");
+		User user = userService.findUser(Long.parseLong(userId.trim()));
+		user.setUserPassword(CommonUtils.decoder(user.getUserPassword()));
+		Set<String> customerCodes = user.getCustomerCodes();
+		List<Customer> res = customerService.getAllCustomer();
+		for (Customer customer : res) {
+			if (customer.getCustomerName().length() > 10)
+				customer.setCustomerName(customer.getCustomerName().substring(0, 10));
+			if (user.getUserRole() == 0) {
+				// 普通用户
+				if (customerCodes.contains(customer.getCustomerCode()))
+					customer.setChecked(Boolean.TRUE);
+			}
+		}
+
+		List<List<Customer>> customers = new ArrayList<List<Customer>>();
+		for (int index = 0;; index++) {
+			int start = index * 3;
+			int end = (start + 3) > res.size() ? res.size() : (start + 3);
+			if (start > res.size())
+				break;
+			customers.add(res.subList(start, end));
+		}
+		model.addAttribute("customers", customers);
+		model.addAttribute("modifyUser", user);
+
+		return "member-update";
+	}
+
 	@RequestMapping(value = "/user/modifyPassword.do")
 	public String modifyPassword(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException {
 
@@ -121,7 +162,65 @@ public class UserController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		String memberExisted = req.getParameter("memberExisted");
+		if (StringUtils.isNotBlank(memberExisted)) {
+			model.addAttribute("memberExisted", Boolean.parseBoolean(memberExisted));
+		}
+
+		List<Customer> res = customerService.getAllCustomer();
+		for (Customer customer : res) {
+			if (customer.getCustomerName().length() > 10)
+				customer.setCustomerName(customer.getCustomerName().substring(0, 10));
+		}
+
+		List<List<Customer>> customers = new ArrayList<List<Customer>>();
+		for (int index = 0;; index++) {
+			int start = index * 3;
+			int end = (start + 3) > res.size() ? res.size() : (start + 3);
+			if (start > res.size())
+				break;
+			customers.add(res.subList(start, end));
+		}
+		model.addAttribute("customers", customers);
+
 		return "member-add";
+	}
+
+	@RequestMapping(value = "/user/update-member.do")
+	public String updateMember(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException {
+
+		if (!CommonUtils.checkSessionTimeOut(req))
+			return "redirect:/login.do";
+
+		String userCount = req.getParameter("userCount");
+		String userName = req.getParameter("userName");
+		String userPassword = req.getParameter("userPassword");
+		String userRole = req.getParameter("userRole");
+		String[] userCustomers = req.getParameterValues("userCustomer");
+		String userCustomer = "";
+		if (Integer.parseInt(userRole) == 0) {
+			if (userCustomers != null && userCustomers.length > 0) {
+				boolean isOr = false;
+				for (String customer : userCustomers) {
+					if (customer.trim().length() > 0) {
+						if (isOr)
+							userCustomer += ",";
+						userCustomer += customer;
+						isOr = true;
+					}
+				}
+			}
+		}
+		User user = new User();
+		user.setUserCount(userCount);
+		user.setUserName(userName);
+		user.setUserPassword(userPassword);
+		user.setUserRole(Integer.parseInt(userRole));
+		user.setUserCustomers(userCustomer);
+
+		userService.updateMember(user);
+
+		return "redirect:/user/member-manage.do";
 	}
 
 	@RequestMapping(value = "/user/add-member.do")
@@ -134,16 +233,32 @@ public class UserController {
 		Integer count = userService.checkUserCountExisted(userCount);
 		if (count > 0) {
 			model.addAttribute("memberExisted", Boolean.TRUE);
-			return "member-add";
+			return "redirect:/user/add-member-index.do";
 		}
 		String userName = req.getParameter("userName");
 		String userPassword = req.getParameter("userPassword");
 		String userRole = req.getParameter("userRole");
+		String[] userCustomers = req.getParameterValues("userCustomer");
+		String userCustomer = "";
+		if (Integer.parseInt(userRole) == 0) {
+			if (userCustomers != null && userCustomers.length > 0) {
+				boolean isOr = false;
+				for (String customer : userCustomers) {
+					if (customer.trim().length() > 0) {
+						if (isOr)
+							userCustomer += ",";
+						userCustomer += customer;
+						isOr = true;
+					}
+				}
+			}
+		}
 		User user = new User();
 		user.setUserCount(userCount);
 		user.setUserName(userName);
 		user.setUserPassword(userPassword);
 		user.setUserRole(Integer.parseInt(userRole));
+		user.setUserCustomers(userCustomer);
 
 		userService.addMember(user);
 

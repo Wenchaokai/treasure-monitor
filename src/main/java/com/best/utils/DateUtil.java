@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class DateUtil {
 	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	public static SimpleDateFormat currentSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public static String getCurrentDateString() {
 		Date date = new Date(System.currentTimeMillis());
@@ -41,9 +42,16 @@ public class DateUtil {
 		return sDateTime;
 	}
 
-	public static String getPreDate() throws ParseException {
+	public static String getPreSevenDate() throws ParseException {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -7);
+		String sDateTime = sdf.format(cal.getTime());
+		return sDateTime;
+	}
+
+	public static String getPreDate() throws ParseException {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_YEAR, -1);
 		String sDateTime = sdf.format(cal.getTime());
 		return sDateTime;
 	}
@@ -57,6 +65,22 @@ public class DateUtil {
 			res.add(sDateTime);
 		}
 		return res;
+	}
+
+	public static List<String> getDateTimes(String startTime, String endTime) throws ParseException {
+		List<String> res = new ArrayList<String>();
+		String currentTime = startTime;
+		while (!currentTime.equals(endTime)) {
+			res.add(currentTime);
+			currentTime = getNextDate(currentTime);
+		}
+		res.add(endTime);
+		return res;
+	}
+
+	public static String getCurrentSdf() {
+		String sDateTime = currentSdf.format(new Date());
+		return sDateTime;
 	}
 
 }

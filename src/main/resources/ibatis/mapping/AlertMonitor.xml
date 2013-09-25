@@ -24,6 +24,8 @@
 		<result property="count" column="count" />
 		<result property="alertMonitorEnableSms" column="alert_monitor_enable_sms" />
 		<result property="alertMonitorEnableEmail" column="alert_monitor_enable_email" />
+		<result property="alertMonitorCount" column="alert_monitor_count" />
+		<result property="parentId" column="parent"/>
 	</resultMap>
 	
 	<select id="FIND_ALERT_MONITOR" parameterClass="java.lang.Long" resultMap="allProperties">
@@ -44,7 +46,7 @@
             FROM 
             	alert_monitor
             WHERE
-            	monitor_id=#monitorId#
+            	monitor_id=#monitorId# AND parent=-1
             ORDER BY 
             	alert_monitor_id desc
         ]]>
@@ -57,7 +59,7 @@
             FROM 
             	alert_monitor
             WHERE
-            	monitor_id=#monitorId#
+            	monitor_id=#monitorId# AND parent=-1
         ]]>
 	</select>
 	<select id="GET_ALL_ALERTMONITOR_BY_PAGESIZE" parameterClass="java.util.Map" resultMap="allProperties">
@@ -66,9 +68,25 @@
             	*
             FROM 
             	alert_monitor
+            WHERE
+            	user_count=#userCount# AND parent=-1
             ORDER BY 
             	alert_monitor_id desc
             LIMIT #start#,#pageSize#
+        ]]>
+	</select>
+	
+	<select id="GET_ENABLED_ALERTMONITOR" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+            SELECT
+            	*
+            FROM 
+            	alert_monitor
+            WHERE
+            	alert_monitor_status=1 AND parent=-1
+            ORDER BY 
+            	alert_monitor_id desc
+            LIMIT #start#,#size#
         ]]>
 	</select>
 	
@@ -78,6 +96,8 @@
             	count(*)
             FROM 
             	alert_monitor
+            WHERE
+            	user_count=#userCount# AND parent=-1
         ]]>
 	</select>
 	
@@ -86,7 +106,9 @@
             DELETE FROM 
             	alert_monitor
             WHERE 
-            	monitor_id=#monitorId#
+            	alert_monitor_id IN (SELECT alert_monitor_id WHERE monitor_id=#monitorId#) 
+            OR 
+            	parent IN (SELECT alert_monitor_id WHERE monitor_id=#monitorId#)
         ]]>
 	</delete>
 	
@@ -95,7 +117,16 @@
             DELETE FROM 
             	alert_monitor
             WHERE 
-            	alert_monitor_id=#alertMonitorId#
+            	alert_monitor_id=#alertMonitorId# OR parent=#alertMonitorId#
+        ]]>
+	</delete>
+	
+	<delete id="DELETE_ALERTMONITOR_BY_PARENT" parameterClass="java.lang.Long">
+		<![CDATA[
+            DELETE FROM 
+            	alert_monitor
+            WHERE 
+            	parent=#parentId#
         ]]>
 	</delete>
 	
@@ -103,9 +134,9 @@
 		<![CDATA[
             INSERT INTO 
             	alert_monitor 
-            	(monitor_id,alert_monitor_day,alert_monitor_compare,alert_monitor_num,alert_monitor_unit,alert_monitor_msg,alert_monitor_sms,alert_monitor_email,alert_monitor_status,monitor_name,alert_monitor_index,alert_monitor_warehouse_code,alert_monitor_warehouse_name,alert_monitor_sku,alert_monitor_district,alert_monitor_enable_sms,alert_monitor_enable_email) 
+            	(monitor_id,alert_monitor_day,alert_monitor_compare,alert_monitor_num,alert_monitor_unit,alert_monitor_msg,alert_monitor_sms,alert_monitor_email,alert_monitor_status,monitor_name,alert_monitor_index,alert_monitor_warehouse_code,alert_monitor_warehouse_name,alert_monitor_sku,alert_monitor_district,alert_monitor_enable_sms,alert_monitor_enable_email,user_count,parent) 
             VALUES 
-            	(#monitorId#,#alertMonitorDay#,#alertMonitorCompare#,#alertMonitorNum#,#alertMonitorUnit#,#alertMonitorMsg#,#alertMonitorSms#,#alertMonitorEmail#,#alertMonitorStatus#,#monitorName#,#alertMonitorIndex#,#alertMonitorWareHouseCode#,#alertMonitorWareHouseName#,#alertMonitorSku#,#alertMonitorDistrict#,#alertMonitorEnableSms#,#alertMonitorEnableEmail#)
+            	(#monitorId#,#alertMonitorDay#,#alertMonitorCompare#,#alertMonitorNum#,#alertMonitorUnit#,#alertMonitorMsg#,#alertMonitorSms#,#alertMonitorEmail#,#alertMonitorStatus#,#monitorName#,#alertMonitorIndex#,#alertMonitorWareHouseCode#,#alertMonitorWareHouseName#,#alertMonitorSku#,#alertMonitorDistrict#,#alertMonitorEnableSms#,#alertMonitorEnableEmail#,#userCount#,#parentId#)
          ]]>
          <selectKey resultClass="Long" keyProperty="alertMonitorId">
             SELECT LAST_INSERT_ID() as alertMonitorId
@@ -133,7 +164,19 @@
 				alert_monitor_sku=#alertMonitorSku#,
 				alert_monitor_district=#alertMonitorDistrict#,
 				alert_monitor_enable_sms=#alertMonitorEnableSms#,
-				alert_monitor_enable_email=#alertMonitorEnableEmail#
+				alert_monitor_enable_email=#alertMonitorEnableEmail#,
+				alert_monitor_count=0
+			WHERE
+				alert_monitor_id=#alertMonitorId#
+		]]>
+	</update>
+	
+	<update id="UPDATE_ALERTMONITOR_COUNT" parameterClass="alertMonitor">
+		<![CDATA[
+			UPDATE
+				alert_monitor
+			SET
+				alert_monitor_count = #alertMonitorCount#
 			WHERE
 				alert_monitor_id=#alertMonitorId#
 		]]>

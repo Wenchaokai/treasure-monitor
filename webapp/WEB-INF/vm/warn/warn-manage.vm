@@ -105,9 +105,7 @@
 														#end
                                                     </select>
                                                     <button type="submit" class="btn btn-primary">查找</button>
-													#if(${user.userRole}==1)
                                                     <a class="btn btn-warning" href="/warn/alertmonitor-add-view.do" target="_self"><i class="icon-plus icon-white"></i>新增告警条件</a>
-													#end
                                                 </div>
                                             </div>
                                         </form>
@@ -134,11 +132,9 @@
                                                     <th class="isopen">
                                                         开启状态
                                                     </th>
-													#if(${user.userRole}==1)
                                                     <th class="opration">
                                                         操作
                                                     </th>
-													#end
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -183,12 +179,10 @@
 																已开启
 															#end
 														</td>
-														#if(${user.userRole}==1)
 														<td>
                                                             <a href="/warn/alertmonitor-update-view.do?alertMonitorId=${alertMonitor.alertMonitorId}&monitorId=${alertMonitor.monitorId}">修改</a>
                                                             <a href="javascript:if(confirm('确认删除吗?'))window.location='/warn/alertmonitor-delete.do?alertMonitorId=${alertMonitor.alertMonitorId}&monitorId=${alertMonitor.monitorId}'" class="btn-del">删除</a>
                                                         </td>
-														#end
                                                     </tr>
 												#end
 
@@ -210,10 +204,9 @@
                                 <!--mod-page start--->
                                 <div class="mod-pages">
                                     <div class="content">
-                                        <div class="pagination pagination-large pagination-right">
+                                        <div class="pagination pagination-right">
                                             <ul>
-                                                
-                                                <li><a href="/warn/alertmonitor-manage.do?currentPage=${prePage}&monitorId=${monitorId}" target="_self">«</a></li>
+                                                <li><a href="/warn/alertmonitor-manage.do?currentPage=${prePage}&monitorId=${monitorId}" target="_self">上一页</a></li>
                 								#set($nums=[${start} .. ${end}])
                 								#foreach($i in $nums)
                 									#if ($i==${currentPage})
@@ -222,9 +215,7 @@
                 										<li><a href="/warn/alertmonitor-manage.do?currentPage=$i&monitorId=${monitorId}">$i</a></li>
                 									#end
                 								#end
-                								<li><a href="/warn/alertmonitor-manage.do?currentPage=${nextPage}&monitorId=${monitorId}">»</a></li>
-                                                
-                                               
+                								<li><a href="/warn/alertmonitor-manage.do?currentPage=${nextPage}&monitorId=${monitorId}">下一页</a></li>
                                             </ul>
                                         </div>
                                     </div>

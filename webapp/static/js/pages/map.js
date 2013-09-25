@@ -18,29 +18,30 @@ jQuery(function($){
             bdary.get(data.split("-")[0], function(rs){
 
                 var maxNum = -1, maxPly;
+                var name = data.split("-")[0];
                 var color = data.split("-")[1];
+                var idoNum = data.split("-")[2];
+                var idoPer = data.split("-")[3];
 
                 var count = rs.boundaries.length;
                 for(var i = 0; i < count; i++){
                     var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 1, strokeOpacity:0.5,fillColor:color,strokeColor: "#000000"});
                     map.addOverlay(ply);
 
-                    //��ʼ��"mouseover","mouseout"����,����ƶ����,����ʡ��Ҳ������.���Ըĳ� click��
                     ply.addEventListener("click", function (e) {
-						return;
+
                         var latlng = e.point;
-                        var info = new BMap.InfoWindow(name + " " + latlng.lat + "," + latlng.lng, {width:220});
+                        var info = new BMap.InfoWindow(name + "订单量是" + idoNum + ", 总占比是" + idoPer+"%", {width:100});
                         map.openInfoWindow(info, latlng);
 
-                        //������˸��ʾ�������ʡ
                         delay = 0;
-                        for (flashTimes = 0; flashTimes < 3; flashTimes++) {
-                            delay += 200;
+                        for (var flashTimes = 0; flashTimes < 3; flashTimes++) {
+                            delay += 100;
                             setTimeout(function () {
                                 ply.setFillColor("#FFFF00");
                             }, delay);
 
-                            delay += 200;
+                            delay += 100;
                             setTimeout(function () {
                                 ply.setFillColor(color);
                             }, delay);

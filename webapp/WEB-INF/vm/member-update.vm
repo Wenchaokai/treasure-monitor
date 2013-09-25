@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>更新会员</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/lib/lib.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/ui.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/topbar.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/header.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/nav.css">
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/member.css">
+    <script src="/static/js/lib/lib.js"></script>
+    <base target="_self"/>
+</head>
+<body>
+	#set($user=$session.getAttribute("USERS")) 
+<div class="doc" id="doc">
+<div class="topbar" id="topbar">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-toolbar">
+                <p><i class="icon-user"></i><span class="user-name">${user.userName}</span>欢迎来到监控宝!<a href="/user/loginout.do" target="_self" class="login">[退出]</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="header" id="header">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-masthead">
+                <a href="/index.do"><img src="/static/img/logo.png" width="312" height="80"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content" id="content">
+<div class="layout layout-nav">
+    <div class="grid">
+        <div class="mod-nav" id="mod-nav">
+            <div class="content">
+                <ul>
+                    <li class="">
+                        <a href="/index.do" target="_self">概述</a>
+                    </li>
+                    <li>
+                        <a href="/monitor/monitor-manage.do" target="_self">监控项目</a>
+                    </li>
+                    <li>
+                        <a href="/warn/warn-manager.do" target="_self">告警</a>
+                    </li>
+                    <li class="active">
+                        <a href="/user/infomanager.do" target="_self">设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layout">
+    <div class="grid">
+        <div class="grid-sub">
+            <div class="mod-side-nav">
+                <div class="content">
+                    <ul>
+                        <li>
+                            <a href="/user/infomanager.do" >
+                                    修改密码
+                            </a>
+                        </li>
+                        #if(${user.userRole}==1)
+                            <li>
+                                <a href="/user/member-manage.do" class="active">会员管理</a>
+                            </li>
+						#end
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="grid-main">
+            <div class="wrap clearfix">
+                <div class="mod-member-add">
+                    <div class="header">
+                        <ul class="breadcrumb">
+                            <li><a href="/user/member-manage.do">会员管理</a> <span class="divider">/</span></li>
+                            <li class="active">会员更新</li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal" method="post" id="newUser-form" action="/user/update-member.do">
+							<input type="text" id="userCount" name="userCount" value="${modifyUser.userCount}" class="hide" />
+                            <div class="control-group #if(${memberExisted}) error #end" id="countDiv">
+                                <label class="control-label" for="userCount">登录账号：</label>
+                                <div class="controls">
+                                    <input type="text" value="${modifyUser.userCount}" placeholder="请登录账号" disabled/>
+                                </div>
+                            </div>
+							<div class="control-group" id="nameDiv">
+                                <label class="control-label" for="userName">登录姓名：</label>
+                                <div class="controls">
+                                    <input type="text" id="userName" name="userName" value="${modifyUser.userName}" placeholder="请登录账号"/>
+                                    <span class="help-inline hide" id="nameSpan">请登录账号</span>
+                                </div>
+                            </div>
+                            <div class="control-group" id="pasDiv"> 
+                                <label class="control-label" for="userPassword">登录密码：</label>
+                                <div class="controls">
+                                    <input type="password" id="userPassword" name="userPassword" value="${modifyUser.userPassword}"  placeholder="请登录密码"/>
+									<span class="help-inline hide" id="pasSpan">请登录账号</span>
+								</div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="userRole">角色：</label>
+                                <div class="controls">
+									#if(${modifyUser.userRole}==0)
+                                        <label class="radio inline">
+                                            <input type="radio" id="userRole" name="userRole" value="1"> 管理员
+                                        </label>
+                                        <label class="radio inline">
+                                            <input type="radio" id="userRole" name="userRole" value="0" checked> 普通用户
+                                        </label>
+									#else
+										<label class="radio inline">
+                                            <input type="radio" id="userRole" name="userRole" value="1" checked> 管理员
+                                        </label>
+                                        <label class="radio inline">
+                                            <input type="radio" id="userRole" name="userRole" value="0"> 普通用户
+                                        </label>
+									#end
+                                </div>
+                            </div>
+							<div class="control-group #if(${modifyUser.userRole}==1) hide #end" id="role-group" name="role-group">
+								 <label class="control-label" for="customer">允许访问的客户：</label>
+								 <div class="controls">
+                                      <div class="customer-select clearfix" id="customer-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+												#foreach($customerList in $customers)
+													<tr>
+													#foreach($customer in $customerList)
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="userCustomer" value="${customer.customerCode}" #if(${customer.checked})checked#end>
+                                                                ${customer.customerName}
+                                                            </label>
+                                                        </td>
+													#end
+													</tr>
+												#end
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-primary">更新</button>
+                                    <button type="reset" class="btn btn-warning" onclick="window.location.href='/user/member-manage.do'">取消</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                 </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<div class="footer clearfix" id="footer">
+    <div class="layout">
+        <div class="grid">
+            <div class="mod-footer">
+                <div class="content">
+                    <p>©2012 800best.com 版权所有 ICP证: 浙B2-20070189</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<script src="/static/js/pages/addMember.js"></script>
+</body>
+</html>

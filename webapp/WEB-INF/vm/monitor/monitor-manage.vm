@@ -67,9 +67,7 @@
                                 <li>所有监控项目</li>
                             </ul>
                             <div class="action">
-								#if(${user.userRole}==1)
-									<a class="btn btn-primary" href="/monitor/monitor-add-view.do" target="_self"><i class="icon-plus icon-white"></i>新增监控项目</a>
-								#end
+								<a class="btn btn-primary" href="/monitor/monitor-add-view.do" target="_self"><i class="icon-plus icon-white"></i>新增监控项目</a>
                             </div>
                         </div>
                    </div>
@@ -120,12 +118,14 @@
                                                     ${monitor.monitorStartTime}
                                                 </td>
                                                 <td>
-													#if(${user.userRole}==1)
-														<a href="/monitor/monitor-update-view.do?monitor_id=${monitor.monitorId}" target="_self" class="action-update">修改</a>
-														<a href="javascript:if(confirm('确认删除吗?'))window.location='/monitor/monitor-delete.do?monitor_id=${monitor.monitorId}'" target="_self" class="action-update">删除</a>
-                                                    #end
+													<a href="/monitor/monitor-update-view.do?monitor_id=${monitor.monitorId}" target="_self" class="action-update">修改</a>
+													<a href="javascript:if(confirm('确认删除吗?'))window.location='/monitor/monitor-delete.do?monitor_id=${monitor.monitorId}'" target="_self" class="action-update">删除</a>
 													<a href="/monitor/monitor-view.do?monitor_id=${monitor.monitorId}" target="_self" class="action-view">查看</a>
-                                                    <a href="/monitor/monitor-dingdan-view.do?monitor_id=${monitor.monitorId}" target="_blank" class="action-view-more">监控明细</a>
+													#if(${monitor.getMonitorIndex().size()}>0)
+														#if (${monitor.getMonitorSkus().size()}>0)
+															<a href="/monitor/monitor-dingdan-view.do?monitor_id=${monitor.monitorId}" target="_blank" class="action-view-more">监控明细</a>
+														#end
+													#end
                                                 </td>
                                             </tr>
 											#set($index=$index+1)
@@ -143,10 +143,10 @@
 					  <div class="mod-pages">
                         <div class="content">
     
-                            <div class="pagination pagination-large pagination-right">
+                            <div class="pagination pagination-right">
                                 <ul>
                                     
-                                    <li><a href="/monitor/monitor-manage.do?currentPage=${prePage}" target="_self">«</a></li>
+                                    <li><a href="/monitor/monitor-manage.do?currentPage=${prePage}" target="_self">上一页</a></li>
     								#set($nums=[${start} .. ${end}])
     								#foreach($i in $nums)
     									#if ($i==${currentPage})
@@ -155,7 +155,7 @@
     										<li><a href="/monitor/monitor-manage.do?currentPage=$i">$i</a></li>
     									#end
     								#end
-    								<li><a href="/monitor/monitor-manage.do?currentPage=${nextPage}">»</a></li>
+    								<li><a href="/monitor/monitor-manage.do?currentPage=${nextPage}">下一页</a></li>
                                     
                                 </ul>
                             </div>

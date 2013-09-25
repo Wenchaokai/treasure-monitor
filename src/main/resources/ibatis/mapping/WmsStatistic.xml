@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="wmsStatisticSpace">
+
+	<typeAlias alias="wmsStatistic" type="com.best.domain.WmsStatistic" />
+	
+	<resultMap class="wmsStatistic" id="allProperties">
+		<result property="qtyEach" column="QTYEACH" />
+		<result property="qtyOnholdEach" column="QTYONHOLDEACH" />
+		<result property="qtyUseEach" column="QTYUSEEACH"/>
+		<result property="qtyHold4PAEach" column="QTYHOLD4PAEACH"/>
+		<result property="dayTime" column="DAYTIME"/>
+	</resultMap>
+
+
+	<select id="SELECT_WMS_INFO" parameterClass="java.util.Map" resultMap="allProperties">
+		<![CDATA[
+			SELECT 
+				SUM(QTYEACH) AS QTYEACH,
+				SUM(QTYONHOLDEACH) AS QTYONHOLDEACH ,
+				SUM(QTYUSEEACH) AS QTYUSEEACH,
+				SUM(QTYHOLD4PAEACH) AS QTYHOLD4PAEACH,
+				date_format(UPDATEDTIME,"%Y%m%d") as DAYTIME
+			FROM 
+				GV_INV_LOTLOCATIONUOM 
+			WHERE
+		]]>
+			<isNotNull property="SKUCODE">
+				SKU_ID  IN (SELECT ID FROM GV_BAS_SKU WHERE SKUCODE=#SKUCODE#) 
+			AND
+			</isNotNull>	
+		<![CDATA[
+			WAREHOUSE_ID IN (SELECT ID FROM GV_BAS_WAREHOUSE WHERE WHCODE=#WHCODE#) 
+			AND CUSTOMER_ID IN (SELECT ID FROM GV_BAS_CUSTOMER WHERE CUSTOMERCODE=#CUSTOMERCODE#) 
+			AND ORG_ID IN (SELECT ID FROM GV_BAS_ORGINFO WHERE ORGCODE=#ORGCODE#)
+			AND 
+				unix_timestamp(UPDATEDTIME)>=unix_timestamp(#startTime#)
+			AND 
+				unix_timestamp(UPDATEDTIME)<=(unix_timestamp(#endTime#)+24*60*60) 
+			GROUP BY 
+				DAYTIME
+		]]>
+	</select>
+	
+</sqlMap>

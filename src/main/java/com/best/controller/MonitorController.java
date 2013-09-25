@@ -3,11 +3,14 @@ package com.best.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +20,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.best.Constants;
+import com.best.domain.AlertMonitor;
 import com.best.domain.Customer;
 import com.best.domain.Monitor;
-import com.best.domain.Treasure;
 import com.best.domain.User;
 import com.best.domain.WareHouse;
 import com.best.service.AlertMonitorService;
 import com.best.service.CustomerService;
 import com.best.service.MonitorService;
-import com.best.service.TreasureService;
+import com.best.service.StatisticService;
 import com.best.service.WareHouseService;
+import com.best.service.WmsStatisticService;
 import com.best.utils.CommonUtils;
 import com.best.utils.DateUtil;
 
@@ -44,9 +48,6 @@ public class MonitorController {
 	private MonitorService monitorService;
 
 	@Autowired
-	private TreasureService treasureService;
-
-	@Autowired
 	private CustomerService customerService;
 
 	@Autowired
@@ -55,22 +56,30 @@ public class MonitorController {
 	@Autowired
 	private AlertMonitorService alertMonitorService;
 
+	@Autowired
+	private StatisticService statisticService;
+
+	@Autowired
+	private WmsStatisticService wmsStatisticService;
+
 	@RequestMapping(value = "/monitor/monitor-manage.do")
 	public String monitorManager(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException {
 
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		String currentPage = req.getParameter("currentPage");
 		int totalPage = 0;
 		List<Monitor> res = null;
-		totalPage = monitorService.getMonitorsTotalSize();
+		totalPage = monitorService.getMonitorsTotalSize(obj.getUserCount());
 
 		if (StringUtils.isBlank(currentPage))
 			currentPage = "1";
 		Integer page = Integer.parseInt(currentPage);
 		if (!(totalPage == 0 || page > totalPage)) {
-			res = monitorService.getMonitors(page - 1);
+			res = monitorService.getMonitors(page - 1, obj.getUserCount());
 		}
 
 		if (null == res)
@@ -106,13 +115,11 @@ public class MonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		String monitorId = req.getParameter("monitor_id");
 
-		monitorService.deleteMonitor(Long.parseLong(monitorId.trim()));
-
-		alertMonitorService.deleteMonitor(Long.parseLong(monitorId.trim()));
-
-		deleteTreasure();
+		monitorService.deleteMonitor(Long.parseLong(monitorId.trim()), obj.getUserCount());
 
 		return "redirect:/monitor/monitor-manage.do";
 	}
@@ -165,8 +172,21 @@ public class MonitorController {
 
 		Set<String> wareHouseCodes = monitor.getMonitorWareHouseCode();
 
+		User user = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		List<Customer> customers = customerService.getAllCustomer();
-		model.addAttribute("customers", customers);
+
+		if (user.getUserRole() == 1)
+			model.addAttribute("customers", customers);
+		else {
+			List<Customer> res = new ArrayList<Customer>();
+			Set<String> customerCode = user.getCustomerCodes();
+			for (Customer customer : customers) {
+				if (customerCode.contains(customer.getCustomerCode()))
+					res.add(customer);
+			}
+			model.addAttribute("customers", res);
+		}
 
 		List<WareHouse> wareHouses = wareHouseService.getAllWareHouse();
 		for (WareHouse wareHouse : wareHouses) {
@@ -200,6 +220,8 @@ public class MonitorController {
 
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
+
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
 
 		String monitorId = req.getParameter("monitorId");
 
@@ -256,7 +278,35 @@ public class MonitorController {
 
 		monitor.setMonitorIndexList(normIds);
 
-		monitorService.updateMonitor(monitor);
+		monitorService.updateMonitor(monitor, obj.getUserCount());
+
+		Set<String> newWareHouseCode = monitor.getMonitorWareHouseCode();
+		Set<String> newSkuList = new HashSet<String>(monitor.getMonitorSkus());
+		Set<Integer> newMonitorIndex = monitor.getMonitorIndexSet();
+
+		// 更新告警条件中的项目
+		List<AlertMonitor> alertMonitors = alertMonitorService.getAlertMonitors(monitorId);
+
+		for (AlertMonitor alertMonitor : alertMonitors) {
+			String skuCode = alertMonitor.getAlertMonitorSku();
+			String wareHouseCode = alertMonitor.getAlertMonitorWareHouseCode();
+			Integer monitorIndex = alertMonitor.getAlertMonitorIndex();
+
+			if (!newMonitorIndex.contains(monitorIndex)) {
+				alertMonitorService.deleteAlertMonitor(alertMonitor.getAlertMonitorId(), monitorId, obj.getUserCount());
+				continue;
+			}
+
+			if (!"-1".equals(skuCode) && !newSkuList.contains(skuCode)) {
+				alertMonitorService.deleteAlertMonitor(alertMonitor.getAlertMonitorId(), monitorId, obj.getUserCount());
+				continue;
+			}
+
+			if (!"-1".equals(wareHouseCode) && !newWareHouseCode.contains(wareHouseCode)) {
+				alertMonitorService.deleteAlertMonitor(alertMonitor.getAlertMonitorId(), monitorId, obj.getUserCount());
+				continue;
+			}
+		}
 
 		model.addAttribute("res", monitor);
 
@@ -290,8 +340,21 @@ public class MonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User user = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		List<Customer> customers = customerService.getAllCustomer();
-		model.addAttribute("customers", customers);
+
+		if (user.getUserRole() == 1)
+			model.addAttribute("customers", customers);
+		else {
+			List<Customer> res = new ArrayList<Customer>();
+			Set<String> customerCode = user.getCustomerCodes();
+			for (Customer customer : customers) {
+				if (customerCode.contains(customer.getCustomerCode()))
+					res.add(customer);
+			}
+			model.addAttribute("customers", res);
+		}
 
 		List<WareHouse> wareHouses = wareHouseService.getAllWareHouse();
 		List<List<WareHouse>> list = new ArrayList<List<WareHouse>>();
@@ -372,8 +435,9 @@ public class MonitorController {
 
 		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
 		monitor.setMonitorResponserId(obj.getUserId());
+		monitor.setUserCount(obj.getUserCount());
 
-		monitor = monitorService.insertMonitor(monitor);
+		monitor = monitorService.insertMonitor(monitor, obj.getUserCount());
 
 		model.addAttribute("res", monitor);
 
@@ -399,8 +463,6 @@ public class MonitorController {
 
 		model.addAttribute("wareHouses", list);
 
-		addTreasure();
-
 		return "/monitor/monitor-view";
 	}
 
@@ -415,19 +477,73 @@ public class MonitorController {
 		String currentSku = req.getParameter("currentSku");
 		String startTime = req.getParameter("startTime");
 		if (StringUtils.isBlank(startTime))
-			startTime = DateUtil.getPreDate();
+			startTime = DateUtil.getPreSevenDate();
 		String endTime = req.getParameter("endTime");
 		if (StringUtils.isBlank(endTime))
 			endTime = DateUtil.getCurrentDateString();
+
+		if (startTime.compareTo(endTime) > 0) {
+			String tempTime = startTime;
+			startTime = endTime;
+			endTime = tempTime;
+		}
 		Integer currentIndexId = 0;
 		Monitor monitor = monitorService.monitorView(Long.parseLong(monitorId.trim()));
 		if (StringUtils.isBlank(currentIndex)) {
-			currentIndexId = monitor.getMonitorIndexSet().get(0);
+			currentIndexId = monitor.getMonitorIndex().get(0);
 		} else
 			currentIndexId = Integer.parseInt(currentIndex);
 
 		if (StringUtils.isBlank(currentSku)) {
 			currentSku = monitor.getMonitorSkus().get(0);
+		}
+		Map<String, WareHouse> wareHouseCodes = monitor.getMonitorWareHouse();
+
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute(Constants.USER_TOKEN_IDENTIFY);
+		if (currentIndexId == 1) {
+			// 分仓SKU订单量
+
+			String key = user.getUserCount() + "_" + currentSku + "_" + monitor.getMonitorCustomerCode() + "_IDO_" + startTime
+					+ "_" + endTime;
+
+			statisticService.getWareHouseSkuIdoCount(currentSku, wareHouseCodes, monitor.getMonitorCustomerCode(), startTime,
+					endTime, key, model);
+
+		} else if (currentIndexId == 2) {
+			// 库存量
+			String currentWareHouse = req.getParameter("wareHouseCode");
+			String currentWareHouseCode = "";
+			String currentWareHouseName;
+			List<WareHouse> wareHouses = wareHouseService.getWareHouseList(wareHouseCodes.keySet());
+			if (wareHouses.size() > 0) {
+				if (StringUtils.isBlank(currentWareHouse)) {
+					currentWareHouseCode = wareHouses.get(0).getWareHouseCode();
+					currentWareHouseName = wareHouses.get(0).getWareHouseName();
+				} else {
+					currentWareHouseCode = req.getParameter("wareHouseCode").split("#")[0];
+					currentWareHouseName = req.getParameter("wareHouseCode").split("#")[1];
+				}
+
+				String key = user.getUserCount() + "_" + currentSku + "_" + monitor.getMonitorCustomerCode() + "_WMS_"
+						+ startTime + "_" + endTime;
+				wmsStatisticService.getWmsSkuIdoCount(user.getUserCount(), currentWareHouseCode, currentWareHouseName,
+						currentSku, monitor.getMonitorCustomerCode(), wareHouses, startTime, endTime, key, model);
+
+			}
+			model.addAttribute("wareHouses", wareHouses);
+			model.addAttribute("currentWareHouseCode", currentWareHouseCode);
+
+		} else if (currentIndexId == 3) {
+			// 分仓地区分布
+			String key = user.getUserCount() + "_" + currentSku + "_" + monitor.getMonitorCustomerCode() + "_DISTRIBUTED_"
+					+ startTime + "_" + endTime;
+			statisticService.getDistributedSkuIdoCount(currentSku, monitor.getMonitorCustomerCode(), startTime, endTime, key,
+					model);
+		} else {
+			String key = user.getUserCount() + "_" + currentSku + "_" + monitor.getMonitorCustomerCode() + "_PERCENTED_"
+					+ startTime + "_" + endTime;
+			statisticService.getPercentSkuIdoCount(currentSku, monitor.getMonitorCustomerCode(), startTime, endTime, key, model);
 		}
 		model.addAttribute("monitor", monitor);
 		model.addAttribute("currentIndex", currentIndexId);
@@ -442,24 +558,18 @@ public class MonitorController {
 	public String map(HttpServletRequest req, HttpServletResponse resp, Model model) throws IOException, ParseException {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
+		String mapFile = req.getParameter("mapFile");
+		String totalCount = req.getParameter("totalCount");
+		String startTime = req.getParameter("startTime");
+		String endTime = req.getParameter("endTime");
+		String skuCode = req.getParameter("skuCode");
 
+		model.addAttribute("mapFile", mapFile);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		model.addAttribute("skuCode", skuCode);
 		return "/monitor/map";
-	}
-
-	private void deleteTreasure() throws ParseException {
-		Treasure treasure = new Treasure();
-		treasure.setDateTime(DateUtil.getCurrentDateString());
-		treasure.setAlarmNums(0);
-		treasure.setMonitorNums(-1);
-		treasureService.updateTreasure(treasure);
-	}
-
-	private void addTreasure() throws ParseException {
-		Treasure treasure = new Treasure();
-		treasure.setDateTime(DateUtil.getCurrentDateString());
-		treasure.setAlarmNums(0);
-		treasure.setMonitorNums(1);
-		treasureService.updateTreasure(treasure);
 	}
 
 }

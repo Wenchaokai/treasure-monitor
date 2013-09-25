@@ -24,8 +24,8 @@ public class CustomerDao extends BaseDao {
 
 	private static final String space = "customerSpace.";
 
-	@Resource(name = "sqlMapClient")
-	protected SqlMapClient sqlMapClient;
+	@Resource(name = "ecbossSqlMapClient")
+	protected SqlMapClient ecbossSqlMapClient;
 
 	@SuppressWarnings("unchecked")
 	public List<Customer> getAllCustomer() {
@@ -39,7 +39,7 @@ public class CustomerDao extends BaseDao {
 		while (true) {
 			map.put("start", start);
 			map.put("pageSize", pageSize);
-			List<Customer> obj = (List<Customer>) this.list(space + selectString, map, sqlMapClient);
+			List<Customer> obj = (List<Customer>) this.list(space + selectString, map, ecbossSqlMapClient);
 			if (obj == null || obj.size() == 0) {
 				break;
 			}

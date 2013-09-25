@@ -36,6 +36,7 @@ public class AlertService extends BaseService {
 	@Autowired
 	private TreasureService treasureService;
 
+	private static final String ALERT_LIST_PREFIX = "ALERT_LIST_";
 	private static final String ALERT_PREFIX = "ALERT_";
 	private static final String ALERT_PAGESIZE_PREFIX = "ALERT_PAGESIZE_";
 
@@ -49,9 +50,7 @@ public class AlertService extends BaseService {
 		try {
 			memcachedClient.set(ALERT_PREFIX + monitorId, 0, alertData);
 			memcachedClient.delete(ALERT_PAGESIZE_PREFIX + monitorId);
-		} catch (TimeoutException e) {
-		} catch (InterruptedException e) {
-		} catch (MemcachedException e) {
+		} catch (Exception e) {
 		}
 		Treasure treasure = new Treasure();
 		treasure.setAlarmNums(1);
@@ -64,7 +63,7 @@ public class AlertService extends BaseService {
 		List<AlertData> res = null;
 		// 从缓存读取数据
 		try {
-			res = memcachedClient.get(ALERT_PREFIX + monitorId);
+			res = memcachedClient.get(ALERT_LIST_PREFIX + monitorId);
 		} catch (TimeoutException e) {
 		} catch (InterruptedException e) {
 		} catch (MemcachedException e) {
@@ -80,7 +79,7 @@ public class AlertService extends BaseService {
 		createExcelFile(res, monitorId);
 
 		try {
-			memcachedClient.add(ALERT_PREFIX + monitorId, 0, res);
+			memcachedClient.add(ALERT_LIST_PREFIX + monitorId, 0, res);
 		} catch (TimeoutException e) {
 		} catch (InterruptedException e) {
 		} catch (MemcachedException e) {
@@ -108,10 +107,13 @@ public class AlertService extends BaseService {
 
 		try {
 			// t.xls为要新建的文件名
-			File file = new File(baseDir, "/monitor/" + monitorId + ".xls");
-			if (file.exists()) {
-				file.delete();
+			File parentFile = new File(baseDir, "/monitor/");
+			if (!parentFile.exists()) {
+				parentFile.mkdirs();
 			}
+			File file = new File(parentFile, monitorId + ".xls");
+			if (file.exists())
+				file.delete();
 			WritableWorkbook book = Workbook.createWorkbook(file);
 			// 生成名为“第一页”的工作表，参数0表示这是第一页
 			WritableSheet sheet = book.createSheet("第一页", 0);

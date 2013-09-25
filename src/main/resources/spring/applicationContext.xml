@@ -41,7 +41,7 @@
 		</property>
 	</bean>
 	
-	<!-- <bean id="ecbossuatDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<bean id="ecbossuatDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName">
 			<value>${jdbc.driver}</value>
@@ -67,17 +67,49 @@
 		<property name="maxIdle">
 			<value>${jdbc.maxIdle}</value>
 		</property>
-	</bean> -->
+	</bean>
+	
+	<bean id="wmsDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc.driver}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_wms.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_wms.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_wms.password}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${jdbc_wms.validationQuery}</value>
+		</property>
+		<property name="testOnBorrow">
+			<value>${jdbc.testOnBorrow}</value>
+		</property>
+		<property name="initialSize">
+			<value>${jdbc.initialSize}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${jdbc.maxIdle}</value>
+		</property>
+	</bean>
 
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<property name="configLocation" value="classpath:ibatis/sqlMapConfig.xml" />
 		<property name="dataSource" ref="treasureDataSource" />
 	</bean>
 	
-	<!-- <bean id="ecbossSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+	<bean id="ecbossSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<property name="configLocation" value="classpath:ibatis/sqlMapEotbossConfig.xml" />
 		<property name="dataSource" ref="ecbossuatDataSource" />
-	</bean> -->
+	</bean>
+	<bean id="wmsSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis/sqlMapWmsConfig.xml" />
+		<property name="dataSource" ref="wmsDataSource" />
+	</bean>
 	<!-- DataSource End -->
 	
 	<!-- Memcached Start -->
@@ -106,7 +138,7 @@
 	</bean>
     <bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
 	    <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
-	    <property name="cronExpression" value="0/5 * * * * ?"></property>  
+	    <property name="cronExpression" value="${best.base.job.croz.expression}"></property>  
 	</bean>
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
 	    <property name="triggers">  

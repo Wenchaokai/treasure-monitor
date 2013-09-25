@@ -14,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.best.Constants;
 import com.best.domain.AlertData;
 import com.best.domain.Monitor;
+import com.best.domain.User;
 import com.best.service.AlertService;
 import com.best.service.MonitorService;
 import com.best.utils.CommonUtils;
@@ -42,7 +44,9 @@ public class WarnController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
-		List<Monitor> monitors = monitorService.getAllMonitor();
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
+		List<Monitor> monitors = monitorService.getAllMonitor(obj.getUserCount());
 
 		Long monitorId = null;
 		String monitorIdString = req.getParameter("monitorId");

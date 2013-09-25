@@ -126,8 +126,31 @@
                                     </label>
                                 </div>
                             </div>
+							<div class="control-group" id="role-group" name="role-group">
+								 <label class="control-label" for="customer">允许访问的客户：</label>
+								 <div class="controls">
+                                      <div class="customer-select clearfix" id="customer-select">
+                                          <table class="ui-table-base">
+                                              <tbody>
+												#foreach($customerList in $customers)
+													<tr>
+													#foreach($customer in $customerList)
+                                                        <td>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="userCustomer" value="${customer.customerCode}">
+                                                                ${customer.customerName}
+                                                            </label>
+                                                        </td>
+													#end
+													</tr>
+												#end
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                            </div>
                             <div class="control-group">
-                                <div class="controls">
+                                <div class="controls" >
                                     <button type="submit" class="btn btn-primary">新增</button>
                                     <button type="reset" class="btn btn-warning" onclick="window.location.href='/user/member-manage.do'">取消</button>
                                 </div>

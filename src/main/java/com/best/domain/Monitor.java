@@ -2,8 +2,10 @@ package com.best.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +32,7 @@ public class Monitor implements Serializable {
 	private String monitorIndexList;
 	private Long monitorResponserId;
 	private String monitorSku;
+	private String userCount;
 
 	public String getMonitorName() {
 		return monitorName;
@@ -65,6 +68,23 @@ public class Monitor implements Serializable {
 
 	public String getMonitorWarehouseNameList() {
 		return monitorWarehouseNameList;
+	}
+
+	public String formatWareHouseName() {
+		if (StringUtils.isNotBlank(monitorWarehouseNameList)) {
+			String[] parts = monitorWarehouseNameList.split(",");
+			String res = "";
+			boolean isOr = false;
+			for (String part : parts) {
+				if (isOr)
+					res += "<br>";
+				res += part;
+				isOr = true;
+			}
+			return res;
+		} else {
+			return "";
+		}
 	}
 
 	public void setMonitorWarehouseNameList(String monitorWarehouseNameList) {
@@ -111,6 +131,14 @@ public class Monitor implements Serializable {
 		this.monitorResponserId = monitorResponserId;
 	}
 
+	public String getUserCount() {
+		return userCount;
+	}
+
+	public void setUserCount(String userCount) {
+		this.userCount = userCount;
+	}
+
 	public List<WareHouse> getWareHouses() {
 		String[] wareHouseCodes = this.monitorWarehouseCodeList.split(",");
 		String[] wareHouseNames = this.monitorWarehouseNameList.split(",");
@@ -136,7 +164,33 @@ public class Monitor implements Serializable {
 		return res;
 	}
 
-	public List<Integer> getMonitorIndexSet() {
+	public Map<String, WareHouse> getMonitorWareHouse() {
+		Map<String, WareHouse> res = new HashMap<String, WareHouse>();
+		if (StringUtils.isNotBlank(monitorWarehouseCodeList) && StringUtils.isNotBlank(monitorWarehouseNameList)) {
+			String[] codeParts = monitorWarehouseCodeList.split(",");
+			String[] nameParts = monitorWarehouseNameList.split(",");
+			for (int index = 0; index < codeParts.length && index < nameParts.length; index++) {
+				WareHouse wareHouse = new WareHouse();
+				wareHouse.setWareHouseCode(codeParts[index]);
+				wareHouse.setWareHouseName(nameParts[index]);
+				res.put(codeParts[index], wareHouse);
+			}
+		}
+		return res;
+	}
+
+	public Set<Integer> getMonitorIndexSet() {
+		Set<Integer> res = new HashSet<Integer>();
+		if (StringUtils.isNotBlank(monitorIndexList)) {
+			String[] parts = monitorIndexList.split(",");
+			for (String id : parts) {
+				res.add(Integer.parseInt(id));
+			}
+		}
+		return res;
+	}
+
+	public List<Integer> getMonitorIndex() {
 		Set<Integer> res = new HashSet<Integer>();
 		if (StringUtils.isNotBlank(monitorIndexList)) {
 			String[] parts = monitorIndexList.split(",");

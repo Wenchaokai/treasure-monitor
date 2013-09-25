@@ -106,6 +106,7 @@
 										#end
                                        </div>
                                    </div>
+								   #if(${currentIndex}!=2)
                                    <div class="control-group control-group-other">
                                        <label class="control-label control-label-left">请选择分仓SKU：</label>
                                        <div class="controls">
@@ -114,31 +115,67 @@
 												<option value="$sku" #if($sku==$currentSku) selected #end>$sku</option>
 											#end
                                            </select>
-                                           <span class="help-inline">选择日期：</span>
-                                           <div class="input-append inline">
-                                               <input size="16" type="text" id="startTime" name="startTime"  value="${startTime}" readonly style="width:100px"/>
+                                           <span class="help-inline" style="margin-left:10px;">选择日期：</span>
+                                           <div class="input-append inline" style="margin-left:10px;">
+                                               <input size="16" type="text" id="startTime" name="startTime"  value="${startTime}" style="width:100px"/>
                                                <span class="add-on"><i class="icon-calendar"></i></span>
                                            </div>
-                                           <span class="help-inline">至</span>
-                                           <div class="input-append inline">
-                                               <input size="16" type="text" id="endTime" name="endTime"  value="${endTime}" readonly style="width:100px"/>
+                                           <span class="help-inline" style="margin-left:10px;">至</span>
+                                           <div class="input-append inline" style="margin-left:10px;">
+                                               <input size="16" type="text" id="endTime" name="endTime"  value="${endTime}" style="width:100px"/>
                                                <span class="add-on"><i class="icon-calendar"></i></span>
                                            </div>
-                                           <button type="submit" class="btn btn-primary">查看</button>
-                                           <a class="btn btn-success" href="#">导出</a>
+                                           <button type="submit" class="btn btn-primary" style="margin-left:10px;">查看</button>
+                                           <a class="btn btn-success" href="${currentExcelFile}">导出</a>
                                        </div>
                                    </div>
+								   #else
+									<div class="control-group control-group-other">
+                                       <label class="control-label control-label-left">请选择分仓SKU：</label>
+                                       <div class="controls">
+                                           <select class="select-sku" name="currentSku" id="currentSku">
+											#foreach($sku in $!monitor.getMonitorSkus())
+												<option value="$sku" #if($sku==$currentSku) selected #end>$sku</option>
+											#end
+                                           </select>
+                                           <span class="help-inline" style="margin-left:10px;">选择日期：</span>
+                                           <div class="input-append inline" style="margin-left:10px;"> 
+                                               <input size="16" type="text" id="startTime" name="startTime"  value="${startTime}" style="width:100px"/>
+                                               <span class="add-on"><i class="icon-calendar"></i></span>
+                                           </div>
+                                           <span class="help-inline" style="margin-left:10px;">至</span>
+                                           <div class="input-append inline" style="margin-left:10px;">
+                                               <input size="16" type="text" id="endTime" name="endTime"  value="${endTime}" style="width:100px"/>
+                                               <span class="add-on"><i class="icon-calendar"></i></span>
+                                           </div>
+                                           
+                                       </div>
+                                   </div>
+								   <div class="control-group control-group-other" >
+                                       <label class="control-label control-label-left">请选择仓库：</label>
+                                       <div class="controls">
+                                           <select class="select-sku" name="wareHouseCode" id="wareHouseCode">
+											#foreach($wareHouse in ${wareHouses})
+												<option value="${wareHouse.wareHouseCode}#${wareHouse.wareHouseName}" #if(${wareHouse.wareHouseCode}==${currentWareHouseCode}) selected #end>${wareHouse.wareHouseName}</option>
+											#end
+                                           </select>
+										   <button type="submit" class="btn btn-primary" style="margin-left:10px;">查看</button>
+										   <a class="btn btn-success" href="${currentExcelFile}">导出</a>
+									   </div>
+								   </div>
+								   #end
                                </form>
                            </div>
 						   #if($currentIndex!=3)
                            <div class="content">
-                               <div class="chart" id="chart" data-url="/json/mingxi-xiaoshou.json">
+                               <div class="chart" id="chart" data-url="${currentFilePath}">
                                </div>
                            </div>
 						   #else
     						   <div class="content">
                                    <div class="wrap wrap-laiyuan">
-                                       <iframe frameborder="0" height="700" marginheight="0" marginwidth="0" scrolling="no" width="990" src="/monitor/map.do"></iframe>
+                                       <iframe frameborder="0" height="700" marginheight="0" marginwidth="0" scrolling="no" width="990" src="/monitor/map.do?mapFile=${mapFile}&totalCount=${totalCount}&startTime=${startTime}&endTime=${endTime}&skuCode=${currentSku}">
+									   </iframe>
                                    </div>
                                </div>
 						   #end
@@ -161,8 +198,9 @@
           </div>
      </div>
 
+     <script src="/static/plugins/highcharts/highcharts.js"></script>
+     <script src="/static/plugins/highcharts/modules/exporting.js"></script>
      <script src="/static/plugins/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.js"></script>
-     <script src="/static/plugins/beechart/flash.js"></script>
-    <script src="/static/js/pages/jiankong.js"></script>
+	 <script src="/static/js/pages/jiankong.js"></script>
 </body>
 </html>

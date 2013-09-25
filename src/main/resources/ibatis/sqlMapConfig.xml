@@ -12,7 +12,8 @@
 	<sqlMap resource="ibatis/mapping/Monitor.xml" />
 	<sqlMap resource="ibatis/mapping/Treasure.xml" />
 	<sqlMap resource="ibatis/mapping/Alert_Data.xml" />
-	<sqlMap resource="ibatis/mapping/Customer.xml" />
-	<sqlMap resource="ibatis/mapping/WareHouse.xml" />
+<!-- 	<sqlMap resource="ibatis/mapping/Customer.xml" /> -->
+	<!-- <sqlMap resource="ibatis/mapping/WareHouse.xml" /> -->
 	<sqlMap resource="ibatis/mapping/AlertMonitor.xml" />
+	<!-- <sqlMap resource="ibatis/mapping/Statistic.xml" /> -->
 </sqlMapConfig>

@@ -16,6 +16,7 @@
 		<result property="monitorIndexList" column="monitor_index_list" />
 		<result property="monitorResponserId" column="monitor_responser_id" />
 		<result property="monitorSku" column="monitor_sku" />
+		<result property="userCount" column="user_count"/>
 	</resultMap>
 	
 	<resultMap class="monitor" id="partProperties">
@@ -30,9 +31,11 @@
 	<select id="SELECT_ALL_MONITOR" parameterClass="java.util.Map" resultMap="partProperties">
 		<![CDATA[
             SELECT
-            	monitor_id,monitor_name,monitor_index_list,monitor_sku,monitor_warehouse_code_list,monitor_warehouse_name_list
+            	monitor_id,monitor_name,monitor_index_list,monitor_sku,monitor_warehouse_code_list,monitor_warehouse_name_list,user_count
             FROM 
             	monitor
+            WHERE
+            	user_count=#userCount#
             ORDER BY 
             	monitor_id desc
             LIMIT #start#,#pageSize#
@@ -45,6 +48,8 @@
             	*
             FROM 
             	monitor
+            WHERE
+            	user_count=#userCount#
             ORDER BY 
             	monitor_id desc
             LIMIT 
@@ -58,6 +63,8 @@
             	count(*)
             FROM 
             	monitor
+            WHERE
+            	user_count=#userCount#
         ]]>
 	</select>
 	
@@ -77,7 +84,7 @@
             FROM 
             	monitor
             WHERE 
-            	monitor_id=#monitorId#
+            	monitor_id=#monitorId# 
         ]]>
 	</select>
 	
@@ -103,9 +110,9 @@
 	<insert id="INSERT_USER" parameterClass="monitor">
 		<![CDATA[
             INSERT INTO 
-            	monitor (monitor_name,monitor_customer_name,monitor_customer_code,monitor_warehouse_code_list,monitor_warehouse_name_list,monitor_status,monitor_start_time,monitor_index_list,monitor_responser_id,monitor_sku) 
+            	monitor (monitor_name,monitor_customer_name,monitor_customer_code,monitor_warehouse_code_list,monitor_warehouse_name_list,monitor_status,monitor_start_time,monitor_index_list,monitor_responser_id,monitor_sku,user_count) 
             VALUES 
-            	(#monitorName#,#monitorCustomerName#, #monitorCustomerCode#,#monitorWarehouseCodeList#,#monitorWarehouseNameList#,#monitorStatus#,#monitorStartTime#,#monitorIndexList#,#monitorResponserId#,#monitorSku#)
+            	(#monitorName#,#monitorCustomerName#, #monitorCustomerCode#,#monitorWarehouseCodeList#,#monitorWarehouseNameList#,#monitorStatus#,#monitorStartTime#,#monitorIndexList#,#monitorResponserId#,#monitorSku#,#userCount#)
          ]]>
          <selectKey resultClass="Long" keyProperty="monitorId">
             SELECT LAST_INSERT_ID() as monitorId

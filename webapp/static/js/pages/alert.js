@@ -47,6 +47,15 @@ jQuery(function($){
     		var distinctDiv = $('#distinctDiv');
     		distinctDiv.addClass('hide');
     	}
+    	
+    	if (value=="3" || value=="4"){
+    		var indexHtml = "<option value=\"1\">%</option>";
+    		alertMonitorUnit.html(indexHtml);
+    		
+    	}else{
+    		var indexHtml = "<option value=\"2\">单</option>";
+    		alertMonitorUnit.html(indexHtml);
+    	}
     });
     
     alertMonitor.change(function(){
@@ -72,9 +81,9 @@ jQuery(function($){
     			else if (indexId==2)
     				indexHtml += "<option value=\"2\">分仓SKU各仓库库存量</option>";
     			else if (indexId==3)
-    				indexHtml += "<option value=\"3\">SKU订单来源的区域分布</option>";
+    				indexHtml += "<option value=\"3\">SKU订单来源的区域分布占比</option>";
     			else if (indexId==4)
-    				indexHtml += "<option value=\"4\">分仓SKU与未分仓SKU关联销售情况</option>";
+    				indexHtml += "<option value=\"4\">分仓SKU与未分仓SKU关联销售情况占比</option>";
     		}
     		alertMonitorIndex.html(indexHtml);
     		
@@ -86,7 +95,7 @@ jQuery(function($){
 	    		if (minSize>wareHouseIdList)
 	    			minSize = wareHouseIdList;
 	    		
-	    		var indexHtml = "";
+	    		var indexHtml = "<option value=\"-1#所有仓库\">所有仓库</option>";
 	    		for (var i=0;i<minSize;i++){
 	    			
 	    			indexHtml += "<option value=\""+wareHouseIdList[i]+"#"+wareHouseNameList[i]+"\">"+wareHouseNameList[i]+"</option>";
@@ -100,7 +109,7 @@ jQuery(function($){
     		if ($.trim(parts[5])!=""){
 	    		var skuList = parts[5].split(";");
 	    		
-	    		var indexHtml = "";
+	    		var indexHtml = "<option value=\"-1#所有SKU\">所有SKU</option>";
 	    		for (var i=0;i<skuList.length;i++){
 	    			
 	    			indexHtml += "<option value=\""+skuList[i]+"\">"+skuList[i]+"</option>";

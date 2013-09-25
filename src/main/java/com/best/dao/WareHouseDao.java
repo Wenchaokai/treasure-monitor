@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -24,7 +25,7 @@ public class WareHouseDao extends BaseDao {
 
 	private static final String space = "wareHouseSpace.";
 
-	@Resource(name = "sqlMapClient")
+	@Resource(name = "ecbossSqlMapClient")
 	protected SqlMapClient sqlMapClient;
 
 	@SuppressWarnings("unchecked")
@@ -49,6 +50,12 @@ public class WareHouseDao extends BaseDao {
 			start += pageSize;
 		}
 		return res;
+	}
+
+	public List<WareHouse> getWareHouseList(Set<String> keySet) {
+		String selectString = "GET_WAREHOUSE_LIST";
+		List<WareHouse> obj = (List<WareHouse>) this.list(space + selectString, new ArrayList<String>(keySet), sqlMapClient);
+		return obj;
 	}
 
 }

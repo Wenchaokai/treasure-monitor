@@ -9,6 +9,8 @@ jQuery(function($){
     	userName = $('#userName'),
     	pasDiv = $('#pasDiv'),
     	pasSpan = $('#pasSpan'),
+    	userRole = $("[name='userRole']"),
+    	roleGroup = $('#role-group'),
     	userPassword = $('#userPassword');
     	
 
@@ -52,6 +54,14 @@ jQuery(function($){
         return false;
         
     }
+    userRole.change(function(){
+    	var selectedValue = $("input[name='userRole']:checked").val();
+    	if (selectedValue==1){
+    		roleGroup.addClass('hide');
+    	}else{
+    		roleGroup.removeClass('hide');
+    	}
+    });
 
     loginForm.on('submit',function(){
         return validUserCount()&&validUserName()&&validUserPassword();

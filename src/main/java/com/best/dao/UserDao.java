@@ -119,4 +119,8 @@ public class UserDao extends BaseDao {
 		return (Integer) this.object(space + "CHECKED_USER_COUNT", userCount, sqlMapClient);
 	}
 
+	public void updateMember(User user) {
+		this.update(space + "UPDATE_USER_INFO", user, sqlMapClient);
+	}
+
 }

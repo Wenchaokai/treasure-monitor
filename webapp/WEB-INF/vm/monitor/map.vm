@@ -9,21 +9,21 @@
 <body>
 <div class="doc" id="doc">
 	<div class="wrap">
-		<div id="map_container" data-url="/json/data.html"></div>
+		<div id="map_container" data-url="/json/${skuCode}/${mapFile}"></div>
 
 			<div class="rate-show">
 				<ul>
-					<li><span class="block" style="background-color:#FCFBBB;"></span>0-0.5%</li>
-					<li><span class="block" style="background-color:#DBEDC7 "></span>0.5%-2%</li>
-					<li><span class="block" style="background-color:#E7CCAF;"></span>2%-5%</li>
-					<li><span class="block" style="background-color:#C8C1E3;"></span>5%-8%</li>
-					<li><span class="block" style="background-color:#FBC5DC;"></span>8+%</li>
+					<li><span class="block" style="background-color:#FFFFB2;"></span>0-0.5%</li>
+					<li><span class="block" style="background-color:#FECC5C;"></span>0.5%-2%</li>
+					<li><span class="block" style="background-color:#FD8D3C;"></span>2%-5%</li>
+					<li><span class="block" style="background-color:#F03B20;"></span>5%-8%</li>
+					<li><span class="block" style="background-color:#BD0026;"></span>8+%</li>
 				</ul>
 			</div>
 			<div class="about-project">
-			   <p>时间周期：2013.03.01 - 2013.06.01</p>
-			   <p>SKU名称：69429216000140/活性炭</p>
-			   <p>订单总量：100,000 （单）</p>
+			   <p>时间周期：${startTime} - ${endTime}</p>
+			   <p>SKU名称：${skuCode}</p>
+			   <p>订单总量：${totalCount} （单）</p>
 			</div>
 	</div>
 </div>

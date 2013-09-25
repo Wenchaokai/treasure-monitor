@@ -123,9 +123,10 @@
 								  <div class="control-group">
                                       <label  for="">请设置您要监控的分仓SKU编码（若有多个SKU，则以“；”分隔）：</label>
                                   </div>
-								  <div class="">
-									<textarea id="sku" name="sku" class="u84" style="width: 936px; height: 62px;" disabled>${res.monitorSku}</textarea>
+								  <div class="control-group">
+									<textarea id="sku" name="sku" class="u84" style="height: 65px;resize: none;width:99%;" disabled>${res.monitorSku}</textarea>
 								  </div>
+								  
                                   <div class="control-group">
                                       <label class="control-label control-label-left" for="">请选择监控指标：</label>
                                   </div>
@@ -192,8 +193,8 @@
                                       </div>
                                   </div>
                                   <div class="control-group">
-                                      <div class="controls">
-                                          <a class="btn btn-primary btn-large" href="/monitor/monitor-manage.do">返回监控首页</a>
+                                      <div class="controls" style="margin-left:40%;">
+                                          <a class="btn btn-primary btn-large"  href="/monitor/monitor-manage.do">返回监控首页</a>
                                       </div>
                                   </div>
                               </form>

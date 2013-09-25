@@ -16,7 +16,7 @@
     <base target="_self"/>
 </head>
 <body>
-	#set($user=$session.getAttribute("USERS")) 
+	 #set($user=$session.getAttribute("USERS")) 
      <div class="doc" id="doc">
           <div class="topbar" id="topbar">
               <div class="layout">
@@ -155,11 +155,9 @@
                                 <!--mod-page start--->
                                 <div class="mod-pages">
                                     <div class="content">
-                
-                                        <div class="pagination pagination-large pagination-right">
+                                        <div class="pagination pagination-right">
                                             <ul>
-                                                
-                                                <li><a href="/warn/warn-manager.do?currentPage=${prePage}&monitorId=${monitorId}" target="_self">«</a></li>
+                                                <li><a href="/warn/warn-manager.do?currentPage=${prePage}&monitorId=${monitorId}" target="_self">上一页</a></li>
                 								#set($nums=[${start} .. ${end}])
                 								#foreach($i in $nums)
                 									#if ($i==${currentPage})
@@ -168,9 +166,7 @@
                 										<li><a href="/warn/warn-manager.do?currentPage=$i&monitorId=${monitorId}">$i</a></li>
                 									#end
                 								#end
-                								<li><a href="/warn/warn-manager.do?currentPage=${nextPage}&monitorId=${monitorId}">»</a></li>
-                                                
-                                               
+                								<li><a href="/warn/warn-manager.do?currentPage=${nextPage}&monitorId=${monitorId}">下一页</a></li>
                                             </ul>
                                         </div>
                                     </div>

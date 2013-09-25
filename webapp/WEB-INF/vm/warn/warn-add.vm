@@ -171,7 +171,6 @@
                                                         <input size="16" type="text" id="alertMonitorNum" name="alertMonitorNum" value="" style="width:100px" disabled>
                                                     </div>
                                                     <select style="width:50px;" id="alertMonitorUnit" name="alertMonitorUnit" disabled>
-                                                        <option value="3">件</option>
                                                         <option value="2">单</option>
                                                         <option value="1">%</option>
                                                     </select>

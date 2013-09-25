@@ -11,6 +11,8 @@
     <link type="text/css" rel="stylesheet" media="all" href="/static/css/module/footer.css">
     <link type="text/css" rel="stylesheet" media="all" href="/static/css/pages/login.css">
     <script src="/static/js/lib/lib.js"></script>
+	<script src="/static/js/lib/jquery-1.8.3.min.js"></script>
+	<script src="/static/js/lib/jquery.cookie.js"></script>
     <base target="_self"/>
 </head>
 <body>
@@ -58,8 +60,8 @@
                                                     <label for="pwd">密码：</label>
                                                     <input type="password" placeholder="请输入密码" name="password" id="pwd">
                                                     <span class="label label-important hide" id="label-pwd">请输入密码。</span>
-                                                    <label class="checkbox hide">
-                                                        <input type="checkbox">记住用户名
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="rmbUser" id="rmbUser">记住用户名
                                                     </label>
                                                     <button type="submit" class="btn btn-block btn-primary">登录</button>
                                                 </div>
@@ -74,7 +76,7 @@
 
               <div class="layout">
                    <div class="grid">
-                       <div class="mod-about-jkb">
+                       <div class="mod-about-bs">
                            <div class="content">
                                <dl class="list">
                                    <dd class="item">

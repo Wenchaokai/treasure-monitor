@@ -16,6 +16,7 @@ public class Customer implements Serializable {
 	private Integer id;
 	private String customerName;
 	private String customerCode;
+	private Boolean checked = Boolean.FALSE;
 
 	public Integer getId() {
 		return id;
@@ -39,6 +40,14 @@ public class Customer implements Serializable {
 
 	public void setCustomerCode(String customerCode) {
 		this.customerCode = customerCode;
+	}
+
+	public Boolean getChecked() {
+		return checked;
+	}
+
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
 	}
 
 }

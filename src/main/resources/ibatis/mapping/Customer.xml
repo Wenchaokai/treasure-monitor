@@ -17,7 +17,7 @@
             FROM 
             	ECBOSS_CUSTOMER
             ORDER BY 
-            	id
+            	CUSTOMERNAME
             LIMIT #start#,#pageSize#
         ]]>
 	</select>

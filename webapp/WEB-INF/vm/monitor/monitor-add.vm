@@ -119,10 +119,12 @@
                                   </div>
 								  <div class="control-group">
                                       <label  for="">请设置您要监控的分仓SKU编码（若有多个SKU，则以“；”分隔）：</label>
+									  
                                   </div>
-								  <div class="">
-									<textarea id="sku" name="sku" class="u84" style="width: 936px; height: 62px;"></textarea>
+								  <div class="control-group">
+									<textarea id="sku" name="sku" class="u84" style="height: 65px;resize: none;width:99%;"></textarea>
 								  </div>
+								  
                                   <div class="control-group">
                                       <label class="control-label control-label-left" for="">请选择监控指标：</label>
                                   </div>
@@ -162,7 +164,7 @@
                                   </div>
                                   <div class="control-group">
                                       <div class="controls">
-                                          <button type="submit" class="btn btn-primary btn-large">确定</button>
+                                          <button type="submit" style="margin-left:20%;" class="btn btn-primary btn-large">确定</button>
                                           <a class="btn btn-danger btn-large" href="javascript:history.go(-1);">取消</a>
                                       </div>
                                   </div>

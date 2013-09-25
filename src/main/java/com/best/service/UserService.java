@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.best.dao.UserDao;
+import com.best.domain.Monitor;
 import com.best.domain.User;
 import com.best.utils.CommonUtils;
 
@@ -25,6 +26,9 @@ public class UserService extends BaseService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private MonitorService monitorService;
 
 	public User checkUser(User user) {
 		user.setUserPassword(CommonUtils.encoder(user.getUserPassword()));
@@ -100,12 +104,34 @@ public class UserService extends BaseService {
 
 	public void deleteMember(String userIdString) {
 		Long userId = Long.parseLong(userIdString);
+		User user = findUser(userId);
+		if (user == null)
+			return;
 		userDao.deleteUser(userId);
-		// FIXME 清除缓存
+
+		List<Monitor> allMonitors = monitorService.getAllMonitor(user.getUserCount());
+		// 删除该用户所创建的监控项目
+		for (Monitor monitor : allMonitors) {
+			monitorService.deleteMonitor(monitor.getMonitorId(), user.getUserCount());
+		}
 	}
 
 	public Integer checkUserCountExisted(String userCount) {
 		return userDao.checkUserCountExisted(userCount);
+	}
+
+	/**
+	 * 
+	 * @param userCount
+	 * @return
+	 */
+	public User findUser(Long userId) {
+		return (User) userDao.findUserById(userId);
+	}
+
+	public void updateMember(User user) {
+		user.setUserPassword(CommonUtils.encoder(user.getUserPassword()));
+		userDao.updateMember(user);
 	}
 
 }

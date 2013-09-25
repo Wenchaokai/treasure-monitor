@@ -83,23 +83,21 @@
                 <div class="wrap clearfix">
                     <div class="mod-set">
                         <div class="header">
-                            <h2>修改密码----会员名:${userName}</h2>
+                            <h2>修改密码</h2>
                         </div>
                         <div class="content">
                             <form class="form-horizontal" id="password-form" method="post" action="/user/modifyPassword.do">
 								<input type="text" id="userId" name="userId" value="${user.userId}" class="hide"/>
 								#if (!${error})
 									#if (${modifyStatus})
-    									<div class="control-group" id="label-error-div">
-    										<label class="control-label" for="oldPassowrd"></label>
-    										<span class="label label-important label-error" ><i class=" icon-white"></i><span class="info">密码修改成功</span></span>
-    									</div>
+										<script type="text/javascript" >
+											alert("密码修改成功");
+										</script>
 									#end
 								#else
-									<div class="control-group" id="label-error-div">
-										<label class="control-label" for="oldPassowrd"></label>
-										<span class="label label-important label-error"><i class=" icon-remove icon-white"></i><span class="info">密码验证出错，请重新输入</span></span>
-									</div>
+									<script type="text/javascript" >
+											alert("密码验证出错，请重新输入");
+									</script>
 								#end
 								
 								<div class="control-group " id="label-error-div1">
@@ -124,7 +122,7 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <div class="controls">
+                                    <div class="controls" >
                                         <button type="submit" class="btn btn-primary">修改密码</button>
                                     </div>
                                 </div>

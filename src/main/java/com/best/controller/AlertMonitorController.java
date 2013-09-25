@@ -3,6 +3,7 @@ package com.best.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.best.Constants;
 import com.best.domain.AlertMonitor;
 import com.best.domain.District;
 import com.best.domain.Monitor;
+import com.best.domain.User;
 import com.best.domain.WareHouse;
 import com.best.service.AlertMonitorService;
 import com.best.service.MonitorService;
@@ -46,6 +49,8 @@ public class AlertMonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		String monitorId = req.getParameter("monitorId");
 		if ("-1".equals(monitorId))
 			monitorId = "";
@@ -57,19 +62,19 @@ public class AlertMonitorController {
 		String currentPage = req.getParameter("currentPage");
 		int totalPage = 0;
 		List<AlertMonitor> res = null;
-		totalPage = alertMonitorService.getAlertMonitorsTotalSize(monitorId);
+		totalPage = alertMonitorService.getAlertMonitorsTotalSize(monitorId, obj.getUserCount());
 
 		if (StringUtils.isBlank(currentPage))
 			currentPage = "1";
 		Integer page = Integer.parseInt(currentPage);
 		if (!(totalPage == 0 || page > totalPage)) {
-			res = alertMonitorService.getAlertMonitorMonitors(monitorId, page - 1);
+			res = alertMonitorService.getAlertMonitorMonitors(monitorId, page - 1, obj.getUserCount());
 		}
 
 		if (null == res)
 			res = new ArrayList<AlertMonitor>();
 
-		List<Monitor> monitors = monitorService.getAllMonitor();
+		List<Monitor> monitors = monitorService.getAllMonitor(obj.getUserCount());
 
 		model.addAttribute("res", res);
 
@@ -100,12 +105,14 @@ public class AlertMonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		String alertMonitorId = req.getParameter("alertMonitorId");
 		String monitorId = req.getParameter("monitorId");
 		if (StringUtils.isBlank(monitorId))
 			monitorId = "";
 
-		alertMonitorService.deleteAlertMonitor(Long.parseLong(alertMonitorId.trim()), monitorId);
+		alertMonitorService.deleteAlertMonitor(Long.parseLong(alertMonitorId.trim()), monitorId, obj.getUserCount());
 
 		return "redirect:/warn/alertmonitor-manage.do?monitorId=" + monitorId;
 	}
@@ -115,7 +122,9 @@ public class AlertMonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
-		List<Monitor> monitors = monitorService.getAllMonitor();
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
+		List<Monitor> monitors = monitorService.getAllMonitor(obj.getUserCount());
 
 		List<District> districts = CommonUtils.getDistricts();
 
@@ -203,7 +212,7 @@ public class AlertMonitorController {
 		alertMonitor.setAlertMonitorWareHouseName(wareHouseName);
 		alertMonitor.setAlertMonitorSku(alertMonitorSku);
 		alertMonitor.setAlertMonitorDay(Integer.parseInt(alertMonitorDay));
-		alertMonitor.setAlertMonitorNum(Integer.parseInt(alertMonitorNum));
+		alertMonitor.setAlertMonitorNum(Double.parseDouble(alertMonitorNum));
 		alertMonitor.setAlertMonitorUnit(Integer.parseInt(alertMonitorUnit));
 		alertMonitor.setAlertMonitorMsg(alertMonitorMsg);
 		alertMonitor.setAlertMonitorCompare(Integer.parseInt(alertMonitorCompare));
@@ -221,7 +230,32 @@ public class AlertMonitorController {
 		else
 			alertMonitor.setAlertMonitorEnableEmail(0);
 
-		alertMonitorService.insertAlertMonitor(alertMonitor);
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+		alertMonitor.setUserCount(obj.getUserCount());
+		alertMonitor.setParentId(-1L);
+
+		Long alertMonitorId = alertMonitorService.insertAlertMonitor(alertMonitor);
+		if (alertMonitor.getAlertMonitorIndex() == 1 || alertMonitor.getAlertMonitorIndex() == 2) {
+			// 分开所有仓库
+			if ("-1".equals(alertMonitor.getAlertMonitorWareHouseCode())) {
+				Monitor monitorInfo = monitorService.monitorView(alertMonitor.getMonitorId());
+				Set<String> wareHouseCodes = monitorInfo.getMonitorWareHouseCode();
+				alertMonitor.setParentId(alertMonitorId);
+				for (String code : wareHouseCodes) {
+					alertMonitor.setAlertMonitorWareHouseCode(code);
+					alertMonitorService.insertAlertMonitor(alertMonitor);
+				}
+			}
+
+		} else if (alertMonitor.getAlertMonitorIndex() == 3) {
+			alertMonitor.setParentId(alertMonitorId);
+			for (String district : monitorDistrict) {
+				if (StringUtils.isNotBlank(district)) {
+					alertMonitor.setAlertMonitorDistrict(district);
+					alertMonitorService.insertAlertMonitor(alertMonitor);
+				}
+			}
+		}
 
 		return "redirect:/warn/alertmonitor-manage.do";
 	}
@@ -231,11 +265,13 @@ public class AlertMonitorController {
 		if (!CommonUtils.checkSessionTimeOut(req))
 			return "redirect:/login.do";
 
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
 		String alertMonitorId = req.getParameter("alertMonitorId");
 
 		AlertMonitor alertMonitor = alertMonitorService.getAlertMonitorMonitor(Long.parseLong(alertMonitorId));
 
-		List<Monitor> monitors = monitorService.getAllMonitor();
+		List<Monitor> monitors = monitorService.getAllMonitor(obj.getUserCount());
 
 		Monitor currentMonitor = null;
 		for (Monitor monitor : monitors) {
@@ -356,7 +392,7 @@ public class AlertMonitorController {
 		alertMonitor.setAlertMonitorWareHouseName(wareHouseName);
 		alertMonitor.setAlertMonitorSku(alertMonitorSku);
 		alertMonitor.setAlertMonitorDay(Integer.parseInt(alertMonitorDay));
-		alertMonitor.setAlertMonitorNum(Integer.parseInt(alertMonitorNum));
+		alertMonitor.setAlertMonitorNum(Double.parseDouble(alertMonitorNum));
 		alertMonitor.setAlertMonitorUnit(Integer.parseInt(alertMonitorUnit));
 		alertMonitor.setAlertMonitorMsg(alertMonitorMsg);
 		alertMonitor.setAlertMonitorCompare(Integer.parseInt(alertMonitorCompare));
@@ -374,7 +410,33 @@ public class AlertMonitorController {
 		else
 			alertMonitor.setAlertMonitorEnableEmail(0);
 
-		alertMonitorService.updateAlertMonitor(alertMonitor);
+		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
+
+		alertMonitorService.updateAlertMonitor(alertMonitor, obj.getUserCount());
+
+		alertMonitorService.deleteAlertMonitorByParent(alertMonitor.getAlertMonitorId());
+
+		if (alertMonitor.getAlertMonitorIndex() == 1 || alertMonitor.getAlertMonitorIndex() == 2) {
+			// 分开所有仓库
+			if ("-1".equals(alertMonitor.getAlertMonitorWareHouseCode())) {
+				Monitor monitorInfo = monitorService.monitorView(alertMonitor.getMonitorId());
+				Set<String> wareHouseCodes = monitorInfo.getMonitorWareHouseCode();
+				alertMonitor.setParentId(alertMonitor.getAlertMonitorId());
+				for (String code : wareHouseCodes) {
+					alertMonitor.setAlertMonitorWareHouseCode(code);
+					alertMonitorService.insertAlertMonitor(alertMonitor);
+				}
+			}
+
+		} else if (alertMonitor.getAlertMonitorIndex() == 3) {
+			alertMonitor.setParentId(alertMonitor.getAlertMonitorId());
+			for (String district : monitorDistrict) {
+				if (StringUtils.isNotBlank(district)) {
+					alertMonitor.setAlertMonitorDistrict(district);
+					alertMonitorService.insertAlertMonitor(alertMonitor);
+				}
+			}
+		}
 
 		return "redirect:/warn/alertmonitor-manage.do";
 	}

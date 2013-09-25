@@ -31,8 +31,14 @@
     background-color: #f7f7f9;
 }
 .mod-add-monitor .btn{
-    padding: 10px 40px;
+    padding:6px 40px;
     margin-right: 20px;
+}
+.mod-add-monitor .form-horizontal .control-group-label{
+    margin-bottom: 4px;
+}
+.mod-add-monitor .form-horizontal .control-label{
+    text-align: left;
 }
 
 .warehouse-select .ui-table-base{

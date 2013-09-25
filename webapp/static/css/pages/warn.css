@@ -11,6 +11,7 @@
 .mod-warn-condition-manage .ui-table td{
     line-height: 24px;
 	padding:8px 0px;
+    font-size: 12px;
 }
 .mod-warn-condition-manage th.monitor-project{
     width: 150px;
@@ -38,7 +39,7 @@
 
 }
 .mod-warn-condition-add .btn{
-    padding: 10px 40px;
+    padding: 6px 40px;
     margin-right: 20px;
 }
 .mod-warn-condition-add .form-horizontal .control-label{
