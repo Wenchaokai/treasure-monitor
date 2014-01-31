@@ -83,7 +83,7 @@ jQuery(function($){
     			else if (indexId==3)
     				indexHtml += "<option value=\"3\">SKU订单来源的区域分布占比</option>";
     			else if (indexId==4)
-    				indexHtml += "<option value=\"4\">分仓SKU与未分仓SKU关联销售情况占比</option>";
+    				indexHtml += "<option value=\"4\">SKU关联销售占比情况</option>";
     		}
     		alertMonitorIndex.html(indexHtml);
     		

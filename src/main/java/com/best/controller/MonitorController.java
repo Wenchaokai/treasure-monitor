@@ -190,10 +190,27 @@ public class MonitorController {
 
 		List<WareHouse> wareHouses = wareHouseService.getAllWareHouse();
 		for (WareHouse wareHouse : wareHouses) {
+			int index = wareHouse.getWareHouseName().indexOf(")");
+			if (index < 0)
+				index = wareHouse.getWareHouseName().indexOf("）");
+			if (index > 0) {
+				wareHouse.setWareHouseName(wareHouse.getWareHouseName().substring(0, index + 1));
+			} else if (wareHouse.getWareHouseName().length() > 8)
+				wareHouse.setWareHouseName(wareHouse.getWareHouseName().substring(0, 8));
 			wareHouse.setChecked(Boolean.FALSE);
 			if (wareHouseCodes.contains(wareHouse.getWareHouseCode()))
 				wareHouse.setChecked(Boolean.TRUE);
 		}
+
+		StringBuilder builder = new StringBuilder();
+		boolean flag = false;
+		for (WareHouse wareHouse : wareHouses) {
+			if (flag)
+				builder.append(";");
+			builder.append(wareHouse.getWareHouseCode() + ":" + wareHouse.getWareHouseName() + ":" + wareHouse.getChecked());
+			flag = true;
+		}
+		model.addAttribute("wareHouseString", builder.toString());
 
 		List<List<WareHouse>> list = new ArrayList<List<WareHouse>>();
 		int size = wareHouses.size();
@@ -357,6 +374,24 @@ public class MonitorController {
 		}
 
 		List<WareHouse> wareHouses = wareHouseService.getAllWareHouse();
+
+		StringBuilder builder = new StringBuilder();
+		boolean flag = false;
+		for (WareHouse wareHouse : wareHouses) {
+			int index = wareHouse.getWareHouseName().indexOf(")");
+			if (index < 0)
+				index = wareHouse.getWareHouseName().indexOf("）");
+			if (index > 0) {
+				wareHouse.setWareHouseName(wareHouse.getWareHouseName().substring(0, index + 1));
+			} else if (wareHouse.getWareHouseName().length() > 8)
+				wareHouse.setWareHouseName(wareHouse.getWareHouseName().substring(0, 8));
+			if (flag)
+				builder.append(";");
+			builder.append(wareHouse.getWareHouseCode() + ":" + wareHouse.getWareHouseName() + ":" + wareHouse.getChecked());
+			flag = true;
+		}
+		model.addAttribute("wareHouseString", builder.toString());
+
 		List<List<WareHouse>> list = new ArrayList<List<WareHouse>>();
 		int size = wareHouses.size();
 		for (int index = 0; index < size; index++) {
@@ -487,6 +522,16 @@ public class MonitorController {
 			startTime = endTime;
 			endTime = tempTime;
 		}
+
+		// 防止查询过多，保护系统，只会查询最近7天
+		long betweenTime = 10;
+		try {
+			betweenTime = DateUtil.betweenDayTime(startTime, endTime);
+		} catch (ParseException e) {
+		}
+		if (betweenTime >= 30)
+			startTime = DateUtil.getPreSevenDate(endTime);
+
 		Integer currentIndexId = 0;
 		Monitor monitor = monitorService.monitorView(Long.parseLong(monitorId.trim()));
 		if (StringUtils.isBlank(currentIndex)) {
@@ -565,7 +610,7 @@ public class MonitorController {
 		String skuCode = req.getParameter("skuCode");
 
 		model.addAttribute("mapFile", mapFile);
-		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalCount", (totalCount == null) ? "0" : totalCount);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("skuCode", skuCode);

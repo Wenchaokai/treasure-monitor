@@ -12,13 +12,13 @@
 	
 	<select id="GET_ALL_CUSTOMER" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
-            SELECT
-            	ID,CUSTOMERNAME,CUSTOMERCODE
-            FROM 
-            	ECBOSS_CUSTOMER
-            ORDER BY 
-            	CUSTOMERNAME
-            LIMIT #start#,#pageSize#
+			SELECT a.*
+			  FROM (SELECT b.*,rownum b_rownum
+			          FROM (SELECT ID,CUSTOMERNAME,CUSTOMERCODE
+			                  FROM ECBOSS_CUSTOMER c WHERE ISACTIVIE=1
+			                 ORDER BY CUSTOMERNAME) b
+			         WHERE rownum <= #end#) a
+			 WHERE b_rownum > #start#
         ]]>
 	</select>
 

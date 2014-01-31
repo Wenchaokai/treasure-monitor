@@ -120,6 +120,16 @@ public class UserController {
 			}
 		}
 
+		StringBuilder builder = new StringBuilder();
+		boolean flag = false;
+		for (Customer customer : res) {
+			if (flag)
+				builder.append(";");
+			builder.append(customer.getCustomerCode() + ":" + customer.getCustomerName() + ":" + customer.getChecked());
+			flag = true;
+		}
+		model.addAttribute("customerString", builder.toString());
+
 		List<List<Customer>> customers = new ArrayList<List<Customer>>();
 		for (int index = 0;; index++) {
 			int start = index * 3;
@@ -172,6 +182,16 @@ public class UserController {
 			if (customer.getCustomerName().length() > 10)
 				customer.setCustomerName(customer.getCustomerName().substring(0, 10));
 		}
+
+		StringBuilder builder = new StringBuilder();
+		boolean flag = false;
+		for (Customer customer : res) {
+			if (flag)
+				builder.append(";");
+			builder.append(customer.getCustomerCode() + ":" + customer.getCustomerName() + ":" + customer.getChecked());
+			flag = true;
+		}
+		model.addAttribute("customerString", builder.toString());
 
 		List<List<Customer>> customers = new ArrayList<List<Customer>>();
 		for (int index = 0;; index++) {

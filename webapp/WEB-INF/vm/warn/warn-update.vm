@@ -133,9 +133,9 @@
 																#end
 															#else
 																#if($alertMonitor.alertMonitorIndex==$indexId)
-																	<option value="4" selected>分仓SKU与未分仓SKU关联销售情况</option>
+																	<option value="4" selected>SKU关联销售占比情况</option>
 																#else
-																	<option value="4">分仓SKU与未分仓SKU关联销售情况</option>
+																	<option value="4">SKU关联销售占比情况</option>
 																#end
 															#end
 														#end

@@ -39,12 +39,15 @@
 		<property name="maxIdle">
 			<value>${jdbc.maxIdle}</value>
 		</property>
+		<property name="maxActive" value="10"/>  
+	    <property name="maxWait" value="60000"/>  
+	    <property name="poolPreparedStatements" value="true"/> 
 	</bean>
 	
 	<bean id="ecbossuatDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName">
-			<value>${jdbc.driver}</value>
+			<value>${jdbc_ecboss.driver}</value>
 		</property>
 		<property name="url">
 			<value>${jdbc_ecboss.url}</value>
@@ -67,12 +70,15 @@
 		<property name="maxIdle">
 			<value>${jdbc.maxIdle}</value>
 		</property>
+		<property name="maxActive" value="10"/>  
+	    <property name="maxWait" value="60000"/>  
+	    <property name="poolPreparedStatements" value="true"/> 
 	</bean>
 	
 	<bean id="wmsDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName">
-			<value>${jdbc.driver}</value>
+			<value>${jdbc_wms.driver}</value>
 		</property>
 		<property name="url">
 			<value>${jdbc_wms.url}</value>
@@ -95,6 +101,9 @@
 		<property name="maxIdle">
 			<value>${jdbc.maxIdle}</value>
 		</property>
+		<property name="maxActive" value="10"/>  
+	    <property name="maxWait" value="60000"/>  
+	    <property name="poolPreparedStatements" value="true"/> 
 	</bean>
 
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
@@ -148,5 +157,15 @@
 	    </property>  
 	</bean>
 	<!--  Job End -->
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.126.com"/>
+        <property name="username" value="ecboss_800best@126.com" />
+        <property name="password" value="ecboss"/>
+	</bean>
+	
+	<bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="ecboss_800best@126.com" />
+	</bean>
 
 </beans>

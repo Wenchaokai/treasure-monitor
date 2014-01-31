@@ -39,7 +39,7 @@ public class WareHouseDao extends BaseDao {
 		int start = 0;
 		while (true) {
 			map.put("start", start);
-			map.put("pageSize", pageSize);
+			map.put("end", start + pageSize);
 			List<WareHouse> obj = (List<WareHouse>) this.list(space + selectString, map, sqlMapClient);
 			if (obj == null || obj.size() == 0) {
 				break;

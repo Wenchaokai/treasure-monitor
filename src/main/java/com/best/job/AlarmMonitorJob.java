@@ -1,15 +1,28 @@
 package com.best.job;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import com.best.domain.AlertData;
 import com.best.domain.AlertMonitor;
@@ -53,6 +66,12 @@ public class AlarmMonitorJob {
 
 	@Autowired
 	private WareHouseService wareHouseService;
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Autowired
+	private SimpleMailMessage simpleMailMessage;
 
 	public void execute() throws JobExecutionException, ParseException {
 		LOG.info("开始进行报警条件检测");
@@ -187,15 +206,40 @@ public class AlarmMonitorJob {
 		String skuCode = alertMonitor.getAlertMonitorSku();
 		List<IdoStatistic> statistics = statisticService._getPercentSkuIdoCount(skuCode, customerCode, startTime, endTime);
 		if (CollectionUtils.isNotEmpty(statistics)) {
-			int totalCount = 0;
+
+			// 记录所有订单的ID号
+			Set<Long> allOrders = new HashSet<Long>();
+
+			Map<String, Set<Long>> skuAmouts = new HashMap<String, Set<Long>>();
 			for (IdoStatistic idoStatistic : statistics) {
-				totalCount += idoStatistic.getNumCount();
-			}
-			for (IdoStatistic idoStatistic : statistics) {
-				if (!idoStatistic.getSkuCode().equals(skuCode))
+				if (idoStatistic.getId() == null)
 					continue;
-				int numCount = idoStatistic.getNumCount();
-				Double percent = (numCount + 0.0) / totalCount * 100;
+
+				allOrders.add(idoStatistic.getId());
+
+				if (idoStatistic.getSkuCode() == null)
+					continue;
+
+				Set<Long> skus = skuAmouts.get(idoStatistic.getSkuCode());
+				if (skus == null) {
+					skus = new HashSet<Long>();
+					skuAmouts.put(idoStatistic.getSkuCode(), skus);
+				}
+				skus.add(idoStatistic.getId());
+			}
+
+			// 根据全部占比来计算SKUCODE排序
+			for (Entry<String, Set<Long>> entry : skuAmouts.entrySet()) {
+				if (entry.getKey() == null || !entry.getKey().equals(skuCode))
+					continue;
+
+				int size = entry.getValue() == null ? 0 : entry.getValue().size();
+				int orderSize = allOrders.size();
+				double percent = 0.0;
+				if (orderSize != 0) {
+					percent = (size + 0.0) / orderSize * 100;
+				}
+
 				if (alertMonitor.getAlertMonitorCompare() == 1) {
 					if (percent > alertMonitor.getAlertMonitorNum())
 						return Boolean.TRUE;
@@ -203,7 +247,6 @@ public class AlarmMonitorJob {
 					if (percent < alertMonitor.getAlertMonitorNum())
 						return Boolean.TRUE;
 				} else if (alertMonitor.getAlertMonitorCompare() == 3) {
-
 					if (percent == alertMonitor.getAlertMonitorNum())
 						return Boolean.TRUE;
 				} else if (alertMonitor.getAlertMonitorCompare() == 4) {
@@ -214,6 +257,7 @@ public class AlarmMonitorJob {
 						return Boolean.TRUE;
 				}
 			}
+
 		} else {
 			int count = 0;
 			if (alertMonitor.getAlertMonitorCompare() == 1) {
@@ -239,7 +283,7 @@ public class AlarmMonitorJob {
 
 	private Boolean detectionIdoDistributedStatistic(AlertMonitor alertMonitor, String startTime, String endTime, Monitor monitor) {
 		String customerCode = monitor.getMonitorCustomerCode();
-		// String wareHouseCode = alertMonitor.getAlertMonitorWareHouseCode();
+
 		String skuCode = alertMonitor.getAlertMonitorSku();
 		List<String> provinces = alertMonitor.getDistributes();
 		List<IdoStatistic> statistics = statisticService._getDistributedSkuIdoCount(skuCode, customerCode, startTime, endTime);
@@ -351,39 +395,52 @@ public class AlarmMonitorJob {
 		return Boolean.FALSE;
 	}
 
+	public void sendMail(final String subject, final String content, final InternetAddress[] tos) throws Exception {
+
+		try {
+			mailSender.send(new MimeMessagePreparator() {
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+					MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+					messageHelper.setFrom(simpleMailMessage.getFrom());
+					messageHelper.setTo(tos);
+					if (subject != null) {
+						messageHelper.setSubject(subject);
+					} else {
+						messageHelper.setSubject("");
+					}
+					if (content != null) {
+						messageHelper.setText(content, true);
+					} else {
+						messageHelper.setText("", true);
+					}
+					messageHelper.setSentDate(new Date(System.currentTimeMillis()));
+				}
+			});
+		} catch (Exception e) {
+			throw new Exception("Send Mail Error:" + tos.toString());
+		}
+	}
+
 	private void sendInfo(AlertMonitor alertMonitor) {
 		LOG.warn("触发了报警条件，monitorName=[{}] 开始发送信息", alertMonitor.getMonitorName());
-		// List<String> receivers = new ArrayList<String>();
-		// if (alertMonitor.getAlertMonitorEnableEmail() == 1) {
-		// String emails = alertMonitor.getAlertMonitorEmail();
-		// if (StringUtils.isNotBlank(emails)) {
-		// String[] parts = emails.split(",");
-		// for (String string : parts) {
-		// if (StringUtils.isNotBlank(string))
-		// receivers.add(string);
-		// }
-		// }
-		// }
-		//
-		// if (alertMonitor.getAlertMonitorEnableSms() == 1) {
-		// String smss = alertMonitor.getAlertMonitorSms();
-		// if (StringUtils.isNotBlank(smss)) {
-		// String[] parts = smss.split(",");
-		// for (String string : parts) {
-		// if (StringUtils.isNotBlank(string))
-		// receivers.add(string);
-		// }
-		// }
-		// }
-		// if (receivers.size() > 0) {
-		// // 发送消息
-		// SmsInfo smsInfo = new
-		// SmsInfoBuilder().setReceivers(receivers.toArray(new
-		// String[0])).setPriority(1).setSign("【监控宝】")
-		// .setSubject("报警消息").setContent(alertMonitor.formatAlertMsg()).setKey(UUID.randomUUID().toString()).build();
-		//
-		// // 发短信设置，他们来设置
-		// }
+		List<String> receivers = new ArrayList<String>();
+
+		InternetAddress[] tos = null;
+		try {
+			tos = InternetAddress.parse(alertMonitor.getAlertMonitorEmail());
+		} catch (AddressException e1) {
+			e1.printStackTrace();
+		}
+
+		if (receivers.size() > 0) {
+			// 发送消息
+			try {
+				if (null != tos && tos.length > 0)
+					sendMail("【监控宝】 报警消息", alertMonitor.formatAlertMsg(), tos);
+			} catch (Exception e) {
+			}
+
+		}
 	}
 
 }

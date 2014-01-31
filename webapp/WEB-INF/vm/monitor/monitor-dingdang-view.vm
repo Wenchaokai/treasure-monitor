@@ -100,7 +100,7 @@
 										    #else 
 												<label class="radio inline">
                                                    <input type="radio" value="4" name="currentIndex" #if(${currentIndex}==4)checked#end>
-                                                   分仓SKU与未分仓SKU关联销售情况
+                                                   SKU关联销售占比情况
                                                </label>
 											#end
 										#end

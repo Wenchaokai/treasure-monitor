@@ -99,11 +99,15 @@ public class TreasureService extends BaseService {
 		if (null == currentTreasure) {
 			Treasure nearestTreasure = treasureDao.getNearestTreasure();
 			if (null != nearestTreasure) {
+
 				while (true) {
 					String dateTime = nearestTreasure.getDateTime();
 					String nextDate = DateUtil.getNextDate(dateTime);
+					if (nextDate.equals(currentDateTime))
+						nearestTreasure.setAlarmNums(0);
 					nearestTreasure.setDateTime(nextDate);
 					addTreasure(nearestTreasure);
+
 					if (nextDate.equals(currentDateTime))
 						break;
 

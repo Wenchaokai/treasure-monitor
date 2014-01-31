@@ -412,6 +412,8 @@ public class AlertMonitorController {
 
 		User obj = (User) req.getSession().getAttribute(Constants.USER_TOKEN_IDENTIFY);
 
+		alertMonitor.setUserCount(obj.getUserCount());
+
 		alertMonitorService.updateAlertMonitor(alertMonitor, obj.getUserCount());
 
 		alertMonitorService.deleteAlertMonitorByParent(alertMonitor.getAlertMonitorId());
@@ -432,6 +434,7 @@ public class AlertMonitorController {
 			alertMonitor.setParentId(alertMonitor.getAlertMonitorId());
 			for (String district : monitorDistrict) {
 				if (StringUtils.isNotBlank(district)) {
+
 					alertMonitor.setAlertMonitorDistrict(district);
 					alertMonitorService.insertAlertMonitor(alertMonitor);
 				}

@@ -303,7 +303,7 @@ public class CommonUtils {
 		for (Map.Entry<String, Integer> entry : provinceMap.entrySet()) {
 			String province = entry.getKey();
 			Integer numCount = entry.getValue();
-			totalCount += numCount;
+			totalCount += (numCount == null) ? 0 : numCount;
 			for (String element : distincts) {
 				if (province.startsWith(element)) {
 					Integer count = mapCount.get(element);
@@ -419,7 +419,7 @@ public class CommonUtils {
 			labels.add(dateTime);
 		}
 
-		JSONArray dataSet = new JSONArray();
+		labels.add("汇总信息");
 
 		int index = 0;
 		Map<String, Map<String, Double>> skuCodeMap = new HashMap<String, Map<String, Double>>();
@@ -438,10 +438,12 @@ public class CommonUtils {
 			}
 		}
 
+		JSONArray dataSet = new JSONArray();
+
 		for (Entry<Double, String> orderPercent : skuPercentMap.entrySet()) {
 			index++;
 			String skuCode = orderPercent.getValue();
-			if (index >= showSize)
+			if (index > showSize)
 				break;
 			Map<String, Double> datePercent = skuCodeMap.get(skuCode);
 
@@ -454,6 +456,7 @@ public class CommonUtils {
 					numCount = 0.0;
 				values.add(numCount);
 			}
+			values.add(orderPercent.getKey());
 			data.put("data", values);
 
 			dataSet.add(data);
@@ -476,7 +479,7 @@ public class CommonUtils {
 
 		res.put("success", true);
 		res.put("type", "column");
-		res.put("title", "分仓SKU与未分仓SKU关联销售情况");
+		res.put("title", "SKU关联销售占比情况");
 		res.put("yAxis", "百分比 (%)");
 		res.put("categories", labels);
 		res.put("series", dataSet);

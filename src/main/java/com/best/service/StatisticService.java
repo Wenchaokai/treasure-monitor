@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
@@ -234,6 +236,8 @@ public class StatisticService extends BaseService {
 		Integer totalCount = 0;
 		for (IdoStatistic idoStatistic : res) {
 			// PROVINCE 作为Key
+			if (idoStatistic.getProvince() == null)
+				continue;
 			Integer numCount = provinceMap.get(idoStatistic.getProvince());
 			if (numCount == null) {
 				numCount = 0;
@@ -271,7 +275,7 @@ public class StatisticService extends BaseService {
 			}
 
 			model.addAttribute("mapFile", showFile.getName());
-			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("totalCount", totalCount == null ? 0 : totalCount);
 
 			// 生成excel文件
 			CommonUtils.createIdoDisSkuExcelFile(startTime, endTime, dateMap, baseDir, key);
@@ -304,49 +308,96 @@ public class StatisticService extends BaseService {
 			} catch (Exception e) {
 			}
 		}
+		if (res == null)
+			res = new ArrayList<IdoStatistic>();
 
-		Map<String, Integer> skuCountMap = new HashMap<String, Integer>();
-		Map<String, Map<String, Integer>> dateMap = new HashMap<String, Map<String, Integer>>();
-		Integer totalCount = 0;
+		// 记录所有订单的ID号
+		Set<Long> allOrders = new HashSet<Long>();
+
+		// 保存每天订单总数
+		Map<String, Set<Long>> orderCountMap = new HashMap<String, Set<Long>>();
+
+		// 记录每天Sku的对应的订单数
+		Map<String, Map<String, Set<Long>>> skuOrderAmounts = new HashMap<String, Map<String, Set<Long>>>();
+		Map<String, Set<Long>> skuAmouts = new HashMap<String, Set<Long>>();
 		for (IdoStatistic idoStatistic : res) {
-			Integer numCount = skuCountMap.get(idoStatistic.getSkuCode());
-			if (numCount == null) {
-				numCount = 0;
-			}
-			numCount += idoStatistic.getNumCount();
-			skuCountMap.put(idoStatistic.getSkuCode(), numCount);
-			totalCount += idoStatistic.getNumCount();
+			String dayTime = idoStatistic.getDateTime();
+			if (idoStatistic.getId() == null)
+				continue;
 
-			// DateTime作为Key
-			Map<String, Integer> dateData = dateMap.get(idoStatistic.getDateTime());
-			if (null == dateData) {
-				dateData = new HashMap<String, Integer>();
-				dateMap.put(idoStatistic.getDateTime(), dateData);
+			allOrders.add(idoStatistic.getId());
+
+			if (dayTime == null)
+				continue;
+			Set<Long> orders = orderCountMap.get(dayTime);
+			if (orders == null)
+				orders = new HashSet<Long>();
+
+			orders.add(idoStatistic.getId());
+			orderCountMap.put(dayTime, orders);
+
+			if (idoStatistic.getSkuCode() == null)
+				continue;
+
+			Map<String, Set<Long>> skuOrderMap = skuOrderAmounts.get(dayTime);
+			if (skuOrderMap == null) {
+				skuOrderMap = new HashMap<String, Set<Long>>();
+				skuOrderAmounts.put(dayTime, skuOrderMap);
 			}
-			dateData.put(idoStatistic.getSkuCode(), idoStatistic.getNumCount());
+
+			Set<Long> skuOrders = skuOrderMap.get(idoStatistic.getSkuCode());
+			if (skuOrders == null) {
+				skuOrders = new HashSet<Long>();
+				skuOrderMap.put(idoStatistic.getSkuCode(), skuOrders);
+			}
+
+			skuOrders.add(idoStatistic.getId());
+
+			Set<Long> skus = skuAmouts.get(idoStatistic.getSkuCode());
+			if (skus == null) {
+				skus = new HashSet<Long>();
+				skuAmouts.put(idoStatistic.getSkuCode(), skus);
+			}
+			skus.add(idoStatistic.getId());
 		}
 
+		// 根据全部占比来计算SKUCODE排序
 		Map<Double, String> skuPercentMap = new TreeMap<Double, String>(Collections.reverseOrder());
-		for (Entry<String, Integer> entry : skuCountMap.entrySet()) {
-			Integer value = entry.getValue();
-			skuPercentMap.put((value + 0.0) / totalCount * 100, entry.getKey());
+		for (Entry<String, Set<Long>> entry : skuAmouts.entrySet()) {
+			if (entry.getKey() == null)
+				continue;
+
+			int size = entry.getValue() == null ? 0 : entry.getValue().size();
+			int orderSize = allOrders.size();
+			double occupy = 0.0;
+			if (orderSize != 0) {
+				occupy = (size + 0.0) / orderSize * 100;
+			}
+			if (!entry.getKey().equals(skuCode))
+				skuPercentMap.put(occupy, entry.getKey());
 		}
 
+		// 每天占比情况
 		Map<String, Map<String, Double>> percentMap = new HashMap<String, Map<String, Double>>();
-		for (Map.Entry<String, Map<String, Integer>> entry : dateMap.entrySet()) {
-			String dateTime = entry.getKey();
-			Map<String, Integer> value = entry.getValue();
-			Integer tempTotalCount = 0;
-			for (Entry<String, Integer> tempEntry : value.entrySet()) {
-				tempTotalCount += tempEntry.getValue();
+		for (Entry<String, Map<String, Set<Long>>> entry : skuOrderAmounts.entrySet()) {
+			if (entry.getKey() == null || entry.getValue() == null)
+				continue;
+			Map<String, Double> resMap = percentMap.get(entry.getKey());
+			if (resMap == null) {
+				resMap = new HashMap<String, Double>();
+				percentMap.put(entry.getKey(), resMap);
 			}
-			Map<String, Double> dateSkuPercentMap = percentMap.get(dateTime);
-			if (dateSkuPercentMap == null) {
-				dateSkuPercentMap = new HashMap<String, Double>();
-				percentMap.put(dateTime, dateSkuPercentMap);
-			}
-			for (Entry<String, Integer> tempEntry : value.entrySet()) {
-				dateSkuPercentMap.put(tempEntry.getKey(), (tempEntry.getValue() + 0.0) / tempTotalCount * 100);
+			for (Entry<String, Set<Long>> temp : entry.getValue().entrySet()) {
+				if (temp.getKey() == null)
+					continue;
+				int size = temp.getValue() == null ? 0 : temp.getValue().size();
+				int allSize = orderCountMap.get(entry.getKey()) == null ? 0 : orderCountMap.get(entry.getKey()).size();
+				double occupy = 0.0;
+				if (allSize != 0) {
+					occupy = (size + 0.0) / allSize * 100;
+				}
+				if (!temp.getKey().equals(skuCode))
+					resMap.put(temp.getKey(), occupy);
 			}
 		}
 
@@ -369,7 +420,7 @@ public class StatisticService extends BaseService {
 				}
 			}
 			model.addAttribute("currentFilePath", "/json/" + skuCode + "/" + showFile.getName());
-			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("totalCount", allOrders.size());
 
 			// 生成excel文件
 			CommonUtils.createIdoSkuPerExcelFile(startTime, endTime, percentMap, skuPercentMap, baseDir, key);

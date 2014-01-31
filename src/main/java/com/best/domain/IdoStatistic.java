@@ -14,10 +14,19 @@ public class IdoStatistic implements Serializable {
 	private static final long serialVersionUID = -3345443060489273681L;
 
 	private Integer numCount;
+	private Long id;
 	private String dateTime;
 	private String wareHouseCode;
 	private String province;
 	private String skuCode;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Integer getNumCount() {
 		return numCount;

@@ -14,13 +14,17 @@
 	
 	<select id="GET_ALL_WAREHOUSE" parameterClass="java.util.Map" resultMap="allProperties">
 		<![CDATA[
-            SELECT
-            	ID,WAREHOUSENAME,WAREHOUSECODE,WMSWAREHOUSECODE,WMSORGCODE
-            FROM 
-            	ECBOSS_WAREHOUSE
-            ORDER BY 
-            	id
-            LIMIT #start#,#pageSize#
+		
+            SELECT a.*
+			  FROM (SELECT b.*,rownum b_rownum
+			          FROM (SELECT
+				            	ID,WAREHOUSENAME,WAREHOUSECODE,WMSWAREHOUSECODE,WMSORGCODE
+				            FROM 
+				            	ECBOSS_WAREHOUSE c
+				            ORDER BY 
+				            	ID) b
+							         WHERE rownum <= #end#) a
+			 			WHERE b_rownum > #start#
         ]]>
 	</select>
 	

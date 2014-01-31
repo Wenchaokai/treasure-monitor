@@ -21,7 +21,7 @@
 				SUM(QTYONHOLDEACH) AS QTYONHOLDEACH ,
 				SUM(QTYUSEEACH) AS QTYUSEEACH,
 				SUM(QTYHOLD4PAEACH) AS QTYHOLD4PAEACH,
-				date_format(UPDATEDTIME,"%Y%m%d") as DAYTIME
+				to_char(UPDATEDTIME,'yyyyMMdd') as DAYTIME
 			FROM 
 				GV_INV_LOTLOCATIONUOM 
 			WHERE
@@ -35,11 +35,11 @@
 			AND CUSTOMER_ID IN (SELECT ID FROM GV_BAS_CUSTOMER WHERE CUSTOMERCODE=#CUSTOMERCODE#) 
 			AND ORG_ID IN (SELECT ID FROM GV_BAS_ORGINFO WHERE ORGCODE=#ORGCODE#)
 			AND 
-				unix_timestamp(UPDATEDTIME)>=unix_timestamp(#startTime#)
+				UPDATEDTIME>=to_date(#startTime#,'yyyyMMdd')
 			AND 
-				unix_timestamp(UPDATEDTIME)<=(unix_timestamp(#endTime#)+24*60*60) 
+				UPDATEDTIME<=(to_date(#endTime#,'yyyyMMdd'))
 			GROUP BY 
-				DAYTIME
+				to_char(UPDATEDTIME,'yyyyMMdd')
 		]]>
 	</select>
 	

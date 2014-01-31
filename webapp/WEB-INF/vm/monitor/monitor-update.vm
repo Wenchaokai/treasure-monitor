@@ -101,10 +101,15 @@
                                   </div>
                                   <div class="control-group">
                                       <label class="control-label" for="">请选择您要监控的仓库：</label>
+									  <div class="controls" style="margin-bottom:5px;">
+										<input type="text" id="filterText"/>
+										<input type="hidden" id="wareHouseString" value="${wareHouseString}" />
+										<button type="button" onclick="filterWareHouse()" style="width:60px;height:30px">过滤</button>
+									 </div>
                                   </div>
                                   <div class="control-group">
                                       <div class="warehouse-select clearfix" id="warehouse-select">
-                                          <table class="ui-table-base">
+                                          <table class="ui-table-base" id="warehouse-table">
                                               <tbody>
                                                     #foreach($warehouseList in $wareHouses)
 													<tr>
@@ -182,12 +187,12 @@
 													#if(${res.monitorIndexSet.contains(4)})
                                                       <label class="checkbox">
                                                           <input type="checkbox" name="norm" value="4" checked >
-                                                          分仓SKU与未分仓SKU关联销售情况
+                                                          SKU关联销售占比情况
                                                       </label>
 													#else
 													  <label class="checkbox">
                                                           <input type="checkbox" name="norm" value="4" >
-                                                          分仓SKU与未分仓SKU关联销售情况
+                                                          SKU关联销售占比情况
                                                       </label>
 													#end
                                                   </td>
@@ -224,5 +229,35 @@
      </div>
     <script src="/static/js/pages/jiankong.js"></script>
 	<script src="/static/js/pages/monitor.js"></script>
+	<script type="text/javascript">
+        function filterWareHouse(){
+        	var filter = $.trim($('#filterText').val());
+    		var filterString = $('#wareHouseString').val();
+    		var wareHouses = filterString.split(';');
+    		var html = "<tbody><tr>";
+    		var appendSize = 0;
+    		for (var index=0;index<wareHouses.length;index++){
+    			if (appendSize%5==0 && index!=0){
+    				html += "</tr><tr>";
+    			}
+    			if (wareHouses[index].match(filter) || filter.length==0){
+    				appendSize++;
+    				var warehouse = wareHouses[index];
+    				var warehouseSplit = warehouse.split(":");
+    				var blockHtml = "<td><label class=\"checkbox\">";
+    				if (warehouseSplit[2]=="false")
+						blockHtml += "<input type=\"checkbox\" name=\"wareHouse\" value=\""+warehouseSplit[0]+"#"+warehouseSplit[1]+"\">";
+    				else 
+						blockHtml += "<input type=\"checkbox\" name=\"wareHouse\" value=\""+warehouseSplit[0]+"#"+warehouseSplit[1]+"\" checked>";
+    				blockHtml += warehouseSplit[1];
+    				blockHtml += "</label></td>";
+    				html += blockHtml;
+    			}
+    		}
+    		var filterTable = $('#warehouse-table');
+    		html += "</tbody>";
+    		filterTable.html(html);
+        }
+    </script>
 </body>
 </html>

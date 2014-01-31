@@ -129,8 +129,13 @@
 							<div class="control-group" id="role-group" name="role-group">
 								 <label class="control-label" for="customer">允许访问的客户：</label>
 								 <div class="controls">
+									 <div class="customer-select clearfix" id="filter-div" style="margin-bottom:5px;">
+										<input type="text" id="filterText"/>
+										<input type="hidden" id="customerString" value="${customerString}" />
+										<button type="button" onclick="filterCustomer()" style="width:60px;height:30px">过滤</button>
+									 </div>
                                       <div class="customer-select clearfix" id="customer-select">
-                                          <table class="ui-table-base">
+                                          <table class="ui-table-base" id="customer-table">
                                               <tbody>
 												#foreach($customerList in $customers)
 													<tr>
@@ -182,5 +187,35 @@
 
 </div>
 <script src="/static/js/pages/addMember.js"></script>
+<script type="text/javascript">
+    function filterCustomer(){
+    	var filter = $.trim($('#filterText').val());
+		var filterString = $('#customerString').val();
+		var customers = filterString.split(';');
+		var html = "<tbody><tr>";
+		var appendSize = 0;
+		for (var index=0;index<customers.length;index++){
+			if (appendSize%3==0 && index!=0){
+				html += "</tr><tr>";
+			}
+			if (customers[index].match(filter) || filter.length==0){
+				appendSize++;
+				var customer = customers[index];
+				var customerSplit = customer.split(":");
+				var blockHtml = "<td><label class=\"checkbox\">";
+				if (customerSplit[2]=="false")
+					blockHtml += "<input type=\"checkbox\" name=\"userCustomer\" value=\""+customerSplit[0]+"\">";
+				else 
+					blockHtml += "<input type=\"checkbox\" name=\"userCustomer\" value=\""+customerSplit[0]+"\" checked>";
+				blockHtml += customerSplit[1];
+				blockHtml += "</label></td>";
+				html += blockHtml;
+			}
+		}
+		var filterTable = $('#customer-table');
+		html += "</tbody>";
+		filterTable.html(html);
+    }
+</script>
 </body>
 </html>

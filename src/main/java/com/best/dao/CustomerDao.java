@@ -38,7 +38,7 @@ public class CustomerDao extends BaseDao {
 		int start = 0;
 		while (true) {
 			map.put("start", start);
-			map.put("pageSize", pageSize);
+			map.put("end", start + pageSize);
 			List<Customer> obj = (List<Customer>) this.list(space + selectString, map, ecbossSqlMapClient);
 			if (obj == null || obj.size() == 0) {
 				break;
@@ -46,7 +46,7 @@ public class CustomerDao extends BaseDao {
 			res.addAll(obj);
 			if (obj.size() < pageSize)
 				break;
-			start += pageSize;
+			start += obj.size();
 		}
 
 		return res;

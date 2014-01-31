@@ -42,6 +42,15 @@ public class DateUtil {
 		return sDateTime;
 	}
 
+	public static String getPreSevenDate(String dateString) throws ParseException {
+		Date date = sdf.parse(dateString);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DAY_OF_YEAR, -8);
+		String sDateTime = sdf.format(cal.getTime());
+		return sDateTime;
+	}
+
 	public static String getPreSevenDate() throws ParseException {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -7);
@@ -81,6 +90,17 @@ public class DateUtil {
 	public static String getCurrentSdf() {
 		String sDateTime = currentSdf.format(new Date());
 		return sDateTime;
+	}
+
+	public static long betweenDayTime(String startTime, String endTime) throws ParseException {
+		Date d1 = sdf.parse(startTime);
+		Date d2 = sdf.parse(endTime);
+		long daysBetween = (d2.getTime() - d1.getTime() + 1000000) / (3600 * 24 * 1000);
+		return daysBetween;
+	}
+
+	public static void main(String[] args) throws ParseException {
+		System.out.println(betweenDayTime("20120108", "20140112"));
 	}
 
 }
